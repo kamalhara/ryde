@@ -1,10 +1,10 @@
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function Home() {
+export default function Signup() {
   return (
     <SafeAreaView>
-      <Text>Home</Text>
+      <Text>Signup</Text>
     </SafeAreaView>
   );
 }
