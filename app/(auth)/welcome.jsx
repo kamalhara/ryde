@@ -10,6 +10,7 @@ export default function Welcome() {
   const router = useRouter();
   const swiperRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const isLastSlide = activeIndex === onboarding.length - 1;
   return (
     <SafeAreaView className="flex items-center justify-between h-full bg-white">
       <TouchableOpacity
@@ -46,7 +47,17 @@ export default function Welcome() {
           </View>
         ))}
       </Swiper>
-      <CustomButton title="Next" className="w-11/12 mt-10 " />
+      <CustomButton
+        title={isLastSlide ? "Get Started" : "Next"}
+        className="w-11/12 mt-10 "
+        onPress={() => {
+          if (isLastSlide) {
+            router.push("/login");
+          } else {
+            swiperRef.current.scrollBy(1);
+          }
+        }}
+      />
     </SafeAreaView>
   );
 }

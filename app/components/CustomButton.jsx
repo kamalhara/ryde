@@ -13,6 +13,21 @@ const getBgVariantStyle = (variant) => {
       return "bg-[#0286ff]";
   }
 };
+
+const getTextVariantStyle = (variant) => {
+  switch (variant) {
+    case "primary":
+      return "text-black";
+    case "secondary":
+      return "text-gray-100";
+    case "danger":
+      return "text-red-100";
+    case "success":
+      return "text-green-100";
+    default:
+      return "text-white";
+  }
+};
 const CustomButton = ({
   title,
   onPress,
@@ -28,7 +43,9 @@ const CustomButton = ({
       className={`w-full rounded-full p-4 flex flex-row justify-center items-center shadow-md shadow-neutral-400/70 ${getBgVariantStyle(bgVariant)} ${className}`}
     >
       {iconLeft && iconLeft}
-      <Text className="text-white text-md font-bold">{title}</Text>
+      <Text className={`text-lg font-bold ${getTextVariantStyle(textVariant)}`}>
+        {title}
+      </Text>
       {iconRight && iconRight}
     </TouchableOpacity>
   );
