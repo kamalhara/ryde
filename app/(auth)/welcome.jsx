@@ -14,7 +14,7 @@ export default function Welcome() {
   return (
     <SafeAreaView className="flex items-center justify-between h-full bg-white">
       <TouchableOpacity
-        onPress={() => router.push("/login")}
+        onPress={() => router.push("/signup")}
         className="w-full flex items-end p-5 justify-end"
       >
         <Text className="text-black text-md font-JakartaBold">Skip</Text>
@@ -52,7 +52,7 @@ export default function Welcome() {
         className="w-11/12 mt-10 "
         onPress={() => {
           if (isLastSlide) {
-            router.push("/login");
+            router.push("/signup");
           } else {
             swiperRef.current.scrollBy(1);
           }
