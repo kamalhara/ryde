@@ -1,10 +1,18 @@
+import { ClerkProvider } from "@clerk/clerk-expo";
+import { tokenCache } from "@clerk/clerk-expo/token-cache";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import "react-native-reanimated";
 import "../global.css";
 
 SplashScreen.preventAutoHideAsync();
+
+export const unstable_settings = {
+  anchor: "(tabs)",
+};
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -28,10 +36,13 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="(authenticated)" options={{ headerShown: false }} />
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-    </Stack>
+    <ClerkProvider tokenCache={tokenCache}>
+      <StatusBar style="dark" />
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(authenticated)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      </Stack>
+    </ClerkProvider>
   );
 }
