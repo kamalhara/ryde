@@ -1,7 +1,8 @@
 import { useSignUp } from "@clerk/clerk-expo";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { Alert, Image, ScrollView, Text, View } from "react-native";
+import ReactNativeModal from "react-native-modal";
 import CustomButton from "../components/CustomButton";
 import InputField from "../components/InputField";
 import OAuth from "../components/OAuth";
@@ -14,6 +15,7 @@ export default function Signup() {
     password: "",
   });
 
+  const router = useRouter();
   const { isLoaded, signUp, setActive } = useSignUp();
 
   const [verification, setVerification] = useState({
@@ -21,6 +23,7 @@ export default function Signup() {
     code: "",
     error: "",
   });
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   // Handle submission of sign-up form
   const onSignUpPress = async () => {
     if (!isLoaded) return;
@@ -37,11 +40,11 @@ export default function Signup() {
 
       // Set 'pendingVerification' to true to display second form
       // and capture code
-      setVerification({ ...verification, state: "pendingVerification" });
+      setVerification({ ...verification, state: "pending" });
     } catch (err) {
       // See https://clerk.com/docs/guides/development/custom-flows/error-handling
       // for more info on error handling
-      console.error(JSON.stringify(err, null, 2));
+      Alert.alert("Error", err.errors[0].longMessage);
     }
   };
 
@@ -87,7 +90,6 @@ export default function Signup() {
     }
   };
 
-  const signupHandler = async () => {};
   return (
     <ScrollView className="bg-white">
       <View className="flex-1 bg-white">
@@ -129,20 +131,76 @@ export default function Signup() {
           <CustomButton
             title="Sign Up"
             className="mt-6"
-            onPress={signupHandler}
+            onPress={onSignUpPress}
           />
+          <OAuth />
+          <Link
+            href="/login"
+            className="text-center  text-lg  text-gray-500 mt-10"
+          >
+            <Text className="text-md font-semibold">
+              Already have an account?{" "}
+              <Text className="text-blue-500">Login</Text>
+            </Text>
+          </Link>
         </View>
 
-        <OAuth />
-        <Link
-          href="/login"
-          className="text-center  text-lg  text-gray-500 mt-10"
+        <ReactNativeModal
+          isVisible={verification.state === "pending"}
+          onModalHide={() => {
+            if (verification.state === "success") {
+              setShowSuccessModal(true);
+            }
+          }}
         >
-          <Text className="text-md font-semibold">
-            Already have an account?{" "}
-            <Text className="text-blue-500">Login</Text>
-          </Text>
-        </Link>
+          <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
+            <Text className="font-bold text-2xl mb-2"> Verification</Text>
+            <Text className="mb-5">
+              We have sent a verification code to {form.email}.
+            </Text>
+            <InputField
+              label="Code"
+              placeholder="12345"
+              icon={icons.lock}
+              keyBoardType="numeric"
+              value={verification.code}
+              onChangeText={(code) => {
+                setVerification({ ...verification, code });
+              }}
+            />
+            {verification.error && (
+              <Text className="text-red-500 mt-1 text-sm">
+                {verification.error}
+              </Text>
+            )}
+            <CustomButton
+              title="Verify"
+              className="mt-5 bg-green-600"
+              onPress={onVerifyPress}
+            />
+          </View>
+        </ReactNativeModal>
+
+        <ReactNativeModal isVisible={showSuccessModal}>
+          <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
+            <Image
+              source={images.check}
+              className="w-[110px] h-[110px] self-center my-5 mx-auto"
+            />
+            <Text className="text-center text-3xl font-bold">Verified</Text>
+            <Text className="text-center text-gray-500 mt-2 text-base">
+              Your have successfully verified your account.
+            </Text>
+            <CustomButton
+              title="Browse home"
+              className="mt-5"
+              onPress={() => {
+                setShowSuccessModal(false);
+                router.push("/home");
+              }}
+            />
+          </View>
+        </ReactNativeModal>
       </View>
     </ScrollView>
   );
