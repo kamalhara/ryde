@@ -1,6 +1,7 @@
-import { Link } from "expo-router";
-import { useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { useSignIn } from "@clerk/clerk-expo";
+import { Link, useRouter } from "expo-router";
+import React, { useState } from "react";
+import { Alert, Image, ScrollView, Text, View } from "react-native";
 import CustomButton from "../components/CustomButton";
 import InputField from "../components/InputField";
 import OAuth from "../components/OAuth";
@@ -11,8 +12,100 @@ export default function Login() {
     email: "",
     password: "",
   });
+  const { signIn, setActive, isLoaded } = useSignIn();
+  const router = useRouter();
+  const [showEmailCode, setShowEmailCode] = useState(false);
+  const [code, setCode] = React.useState("");
 
-  const loginHandler = async () => {};
+  const onSignInPress = React.useCallback(async () => {
+    if (!isLoaded) return;
+
+    // Start the sign-in process using the email and password provided
+    try {
+      const signInAttempt = await signIn.create({
+        identifier: form.email,
+        password: form.password,
+      });
+
+      // If sign-in process is complete, set the created session as active
+      // and redirect the user
+      if (signInAttempt.status === "complete") {
+        await setActive({
+          session: signInAttempt.createdSessionId,
+          navigate: async ({ session }) => {
+            if (session?.currentTask) {
+              // Check for tasks and navigate to custom UI to help users resolve them
+              // See https://clerk.com/docs/guides/development/custom-flows/authentication/session-tasks
+              console.log(session?.currentTask);
+              return;
+            }
+
+            router.push("/home");
+          },
+        });
+      } else if (signInAttempt.status === "needs_second_factor") {
+        // Check if email_code is a valid second factor
+        // This is required when Client Trust is enabled and the user
+        // is signing in from a new device.
+        // See https://clerk.com/docs/guides/secure/client-trust
+        const emailCodeFactor = signInAttempt.supportedSecondFactors?.find(
+          (factor) => factor.strategy === "email_code",
+        );
+
+        if (emailCodeFactor) {
+          await signIn.prepareSecondFactor({
+            strategy: "email_code",
+            emailAddressId: emailCodeFactor.emailAddressId,
+          });
+          setShowEmailCode(true);
+        }
+      } else {
+        // If the status is not complete, check why. User may need to
+        // complete further steps.
+        Alert.alert(
+          "Error",
+          "Sign-in not complete. " + JSON.stringify(signInAttempt, null, 2),
+        );
+      }
+    } catch (err) {
+      // See https://clerk.com/docs/guides/development/custom-flows/error-handling
+      // for more info on error handling
+      Alert.alert("Error", err.errors[0].longMessage);
+    }
+  }, [isLoaded, signIn, setActive, router, form.email, form.password]);
+
+  // Handle the submission of the email verification code
+  const onVerifyPress = React.useCallback(async () => {
+    if (!isLoaded) return;
+
+    try {
+      const signInAttempt = await signIn.attemptSecondFactor({
+        strategy: "email_code",
+        code,
+      });
+
+      if (signInAttempt.status === "complete") {
+        await setActive({
+          session: signInAttempt.createdSessionId,
+          navigate: async ({ session }) => {
+            if (session?.currentTask) {
+              // Check for tasks and navigate to custom UI to help users resolve them
+              // See https://clerk.com/docs/guides/development/custom-flows/authentication/session-tasks
+              console.log(session?.currentTask);
+              return;
+            }
+
+            router.replace("/");
+          },
+        });
+      } else {
+        console.error(JSON.stringify(signInAttempt, null, 2));
+      }
+    } catch (err) {
+      console.error(JSON.stringify(err, null, 2));
+    }
+  }, [isLoaded, signIn, setActive, router, code]);
+
   return (
     <ScrollView className="bg-white">
       <View className="flex-1 bg-white">
@@ -29,6 +122,8 @@ export default function Login() {
             placeholder="Enter your email"
             icon={icons.email}
             value={form.email}
+            keyboardType="email-address"
+            autoCapitalize="none"
             onChangeText={(value) => {
               setForm({ ...form, email: value });
             }}
@@ -42,7 +137,11 @@ export default function Login() {
               setForm({ ...form, password: value });
             }}
           />
-          <CustomButton title="Login" className="mt-6" onPress={loginHandler} />
+          <CustomButton
+            title="Login"
+            className="mt-6"
+            onPress={onSignInPress}
+          />
         </View>
 
         <OAuth />
@@ -51,7 +150,7 @@ export default function Login() {
           className="text-center  text-lg  text-gray-500 mt-10"
         >
           <Text className="text-md font-semibold">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Text className="text-blue-500">Sign Up</Text>
           </Text>
         </Link>

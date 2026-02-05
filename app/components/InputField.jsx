@@ -18,6 +18,7 @@ const InputField = ({
   inputStyle,
   iconStyle,
   className,
+  keyboardType = "default",
   ...props
 }) => {
   return (
@@ -43,6 +44,7 @@ const InputField = ({
             <TextInput
               className={`rounded-full p-4 font-semibold text-[15px] flex-1 ${inputStyle} text-left`}
               secureTextEntry={secureTextEntry}
+              keyboardType={keyboardType}
               {...props}
             />
           </View>
