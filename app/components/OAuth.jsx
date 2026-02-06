@@ -19,7 +19,7 @@ const OAuth = () => {
         bgVariant="outline"
         textVariant="primary"
         iconLeft={<Image source={icons.google} className="w-5 h-5 mx-2" />}
-        onPress={router.push("/home")}
+        onPress={handleGoogleLogin}
       />
     </TouchableOpacity>
   );

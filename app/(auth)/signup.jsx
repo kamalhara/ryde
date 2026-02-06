@@ -1,7 +1,14 @@
 import { useSignUp } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, Image, ScrollView, Text, View } from "react-native";
+import {
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import ReactNativeModal from "react-native-modal";
 import CustomButton from "../components/CustomButton";
 import InputField from "../components/InputField";
@@ -15,7 +22,6 @@ export default function Signup() {
     password: "",
   });
 
-  const hello = "";
   const router = useRouter();
   const { isLoaded, signUp, setActive } = useSignUp();
 
@@ -145,11 +151,28 @@ export default function Signup() {
               setForm({ ...form, password: value });
             }}
           />
-          <CustomButton
-            title="Sign Up"
-            className="mt-6"
-            onPress={onSignUpPress}
-          />
+          {form.name && form.email && form.password ? (
+            <CustomButton
+              title="Sign Up"
+              className="mt-6"
+              onPress={onSignUpPress}
+            />
+          ) : (
+            <CustomButton
+              title="Sign Up"
+              className="mt-6"
+              onPress={() => {
+                Alert.alert("Error", "Please fill all fields");
+              }}
+            />
+          )}
+
+          <TouchableOpacity
+            className="mt-4 w-full "
+            onPress={() => router.push("/home")}
+          >
+            <Text className="text-blue-500 text-center">Dev login</Text>
+          </TouchableOpacity>
           <OAuth />
           <Link
             href="/login"
