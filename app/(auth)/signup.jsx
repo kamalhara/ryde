@@ -15,13 +15,20 @@ import InputField from "../components/InputField";
 import OAuth from "../components/OAuth";
 import { icons, images } from "../constants";
 
-const fetchAPI = async () => {
-  // Add your API call logic here
+const fetchAPI = async (url, options) => {
   try {
-    // Example: Create user profile or sync data with backend
-    // const response = await fetch('your-api-endpoint', { ... });
+    const response = await fetch(`/${url}`, {
+      method: options?.method || "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: options?.body,
+    });
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error("API call failed:", error);
+    throw error;
   }
 };
 
@@ -218,7 +225,7 @@ export default function Signup() {
             </Text>
             <InputField
               label="Code"
-              placeholder="12345"
+              placeholder="123456"
               icon={icons.lock}
               keyBoardType="numeric"
               value={verification.code}

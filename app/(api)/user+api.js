@@ -16,8 +16,15 @@ export async function POST(Request) {
     const response = await sql`
         INSERT INTO users (email, name, clerk_id)
         VALUES (${email}, ${name}, ${clerkId})
-
         `;
-  } catch (error) {}
+
+    return Response.json({ success: true, data: response }, { status: 201 });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return Response.json(
+      { error: "Failed to create user", details: error.message },
+      { status: 500 },
+    );
+  }
 }
 // const users = await sql`SELECT * FROM users`;
