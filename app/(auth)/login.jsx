@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";

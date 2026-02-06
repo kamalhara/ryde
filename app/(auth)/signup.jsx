@@ -15,6 +15,16 @@ import InputField from "../components/InputField";
 import OAuth from "../components/OAuth";
 import { icons, images } from "../constants";
 
+const fetchAPI = async () => {
+  // Add your API call logic here
+  try {
+    // Example: Create user profile or sync data with backend
+    // const response = await fetch('your-api-endpoint', { ... });
+  } catch (error) {
+    console.error("API call failed:", error);
+  }
+};
+
 export default function Signup() {
   const [form, setForm] = useState({
     name: "",
@@ -76,6 +86,14 @@ export default function Signup() {
       // If verification was completed, set the session to active
       // and redirect the user
       if (signUpAttempt.status === "complete") {
+        await fetchAPI("(api)/user", {
+          method: "POST",
+          body: JSON.stringify({
+            name: form.name,
+            email: form.email,
+            clerkId: signUpAttempt.createdUserId,
+          }),
+        });
         await setActive({
           session: signUpAttempt.createdSessionId,
           navigate: async ({ session }) => {
