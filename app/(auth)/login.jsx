@@ -70,7 +70,38 @@ export default function Login() {
     } catch (err) {
       // See https://clerk.com/docs/guides/development/custom-flows/error-handling
       // for more info on error handling
-      Alert.alert("Error", err.errors[0].longMessage);
+      console.error("Auth error:", err);
+      const message =
+        err?.errors?.[0]?.longMessage || err?.message || JSON.stringify(err);
+
+      const lower = String(message).toLowerCase();
+
+      // Only redirect to home for explicit "already signed in/logged in" messages
+      if (/already (signed in|logged in)/i.test(message)) {
+        router.replace("/home");
+        return;
+      }
+
+      // Friendly message for common credential errors
+      if (
+        lower.includes("invalid") ||
+        lower.includes("wrong") ||
+        lower.includes("not found") ||
+        lower.includes("no user") ||
+        lower.includes("couldn't find") ||
+        lower.includes("identifier") ||
+        lower.includes("password") ||
+        lower.includes("credentials")
+      ) {
+        Alert.alert("Error", "Invalid email or password");
+        return;
+      }
+
+      // For any other unknown error, show a generic message instead of raw error
+      Alert.alert(
+        "Error",
+        "Login failed. Please check your credentials and try again.",
+      );
     }
   }, [isLoaded, signIn, setActive, router, form.email, form.password]);
 

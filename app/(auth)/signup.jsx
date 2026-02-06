@@ -15,6 +15,7 @@ export default function Signup() {
     password: "",
   });
 
+  const hello = "";
   const router = useRouter();
   const { isLoaded, signUp, setActive } = useSignUp();
 
@@ -44,7 +45,15 @@ export default function Signup() {
     } catch (err) {
       // See https://clerk.com/docs/guides/development/custom-flows/error-handling
       // for more info on error handling
-      Alert.alert("Error", err.errors[0].longMessage);
+      const message =
+        err?.errors?.[0]?.longMessage || err?.message || JSON.stringify(err);
+
+      if (String(message).toLowerCase().includes("already")) {
+        router.replace("/home");
+        return;
+      }
+
+      Alert.alert("Error", message);
     }
   };
 
@@ -86,6 +95,14 @@ export default function Signup() {
     } catch (err) {
       // See https://clerk.com/docs/guides/development/custom-flows/error-handling
       // for more info on error handling
+      const message =
+        err?.errors?.[0]?.longMessage || err?.message || JSON.stringify(err);
+
+      if (String(message).toLowerCase().includes("already")) {
+        router.replace("/home");
+        return;
+      }
+
       console.error(JSON.stringify(err, null, 2));
     }
   };
