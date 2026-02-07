@@ -1,19 +1,36 @@
-import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
 import { StyleSheet } from "react-native";
+import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
+import { calculateRegion } from "../lib/map";
+import { useDriverStore, useLocationStore } from "../store";
 
 export default function Map() {
+  const {
+    userLongitude,
+    userLatitude,
+    destinationLongitude,
+    destinationLatitude,
+  } = useLocationStore();
+
+  const { selectedDriver, setDrivers } = useDriverStore();
+
+  const region = calculateRegion({
+    userLatitude,
+    userLongitude,
+    destinationLatitude,
+    destinationLongitude,
+  });
+
   return (
     <MapView
       provider={PROVIDER_DEFAULT}
       style={styles.map}
-      initialRegion={{
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }}
+      initialRegion={region}
       showsUserLocation={true}
+      userInterfaceStyle="light"
       showsMyLocationButton={true}
+      mapType="mutedStandard"
+      tintColor="black"
+      showsPointsOfInterest={false}
     />
   );
 }
