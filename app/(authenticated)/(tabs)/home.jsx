@@ -1,9 +1,11 @@
 import { useUser } from "@clerk/clerk-expo";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import RideCard from "../../components/RideCard";
-import { icons, images } from "../../constants";
-import rides from "../../data/rides";
+import GoogleInputText from "../../../components/GoogleInputText";
+import Map from "../../../components/Map";
+import RideCard from "../../../components/RideCard";
+import { icons, images } from "../../../constants";
+import rides from "../../../data/rides";
 
 export default function Home() {
   const { user } = useUser();
@@ -11,6 +13,9 @@ export default function Home() {
 
   const handleSignOut = () => {
     // Implement sign-out logic here
+  };
+  const handleDestinationSearch = () => {
+    // Implement destination search logic here
   };
 
   return (
@@ -51,6 +56,22 @@ export default function Home() {
                 <Image source={icons.out} className="h-5 w-5" />
               </TouchableOpacity>
             </View>
+            <GoogleInputText
+              handlePress={handleDestinationSearch}
+              icon={icons.search}
+              ContainerStyle="bg-white shadow-md shadow-neutral-300 rounded-full"
+            />
+
+            <>
+              <Text className="text-xl font-bold mt-5 mb-3">
+                You&apos;re current location
+              </Text>
+
+              <View className="flex flex-row items-center bg-transparent h-[300px]">
+                <Map />
+              </View>
+            </>
+            <Text className="text-lg font-bold mt-5 mb-3">Recent Rides</Text>
           </>
         )}
       />

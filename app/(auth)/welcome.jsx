@@ -3,8 +3,8 @@ import { useRef, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Swiper from "react-native-swiper";
-import CustomButton from "../components/CustomButton";
-import { onboarding } from "../constants";
+import CustomButton from "../../components/CustomButton";
+import { onboarding } from "../../constants";
 
 export default function Welcome() {
   const router = useRouter();
