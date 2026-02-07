@@ -67,7 +67,7 @@ export default function Home() {
                 You&apos;re current location
               </Text>
 
-              <View className="flex flex-row items-center bg-transparent h-[300px]">
+              <View className="w-full h-[300px] overflow-hidden rounded-2xl">
                 <Map />
               </View>
             </>

@@ -21,6 +21,7 @@ const TabsLayout = () => {
       </View>
     );
   };
+
   return (
     <Tabs
       screenOptions={{
