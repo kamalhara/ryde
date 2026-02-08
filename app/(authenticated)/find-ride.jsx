@@ -16,11 +16,13 @@ export default function FindRide() {
   return (
     <RideLayout title="Ride" snapPoints={["85%"]}>
       <View className="my-3">
-        <Text className="text-lg font-bold mb-3">From</Text>
+        <Text className="text-base font-JakartaSemiBold text-gray-700 mb-3">
+          From
+        </Text>
         <OSMSearchBar
           icon={icons.target}
           initalLocation={userAddress}
-          ContainerStyle="bg-neutral-100"
+          ContainerStyle="bg-gray-50 border border-gray-200"
           textInputBackgroundColor="transparent"
           onSelect={(location) => {
             setUserLocation(location);
@@ -29,11 +31,13 @@ export default function FindRide() {
       </View>
 
       <View className="my-3">
-        <Text className="text-lg font-bold mb-3">To</Text>
+        <Text className="text-base font-JakartaSemiBold text-gray-700 mb-3">
+          To
+        </Text>
         <OSMSearchBar
           icon={icons.map}
           initalLocation={destinationAddress}
-          ContainerStyle="bg-neutral-100"
+          ContainerStyle="bg-gray-50 border border-gray-200"
           textInputBackgroundColor="transparent"
           onSelect={(location) => {
             setDestinationLocation(location);

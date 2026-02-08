@@ -97,17 +97,31 @@ export default function Home() {
           ListHeaderComponent={() => (
             <>
               <View className="flex flex-row items-center justify-between my-5">
-                <Text className="text-lg font-bold">
-                  Welcome{"  "}
-                  {user?.firstName ||
-                    user?.emailAddresses[0].emailAddress.split("@")[0]}
-                  👋🏻
-                </Text>
+                <View>
+                  <Text className="text-sm font-JakartaMedium text-gray-500">
+                    Good to see you 👋
+                  </Text>
+                  <Text className="text-2xl font-JakartaBold text-gray-900 mt-1">
+                    {user?.firstName ||
+                      user?.emailAddresses[0].emailAddress.split("@")[0]}
+                  </Text>
+                </View>
                 <TouchableOpacity
                   onPress={handleSignOut}
-                  className="flex flex-row items-center gap-x-1"
+                  className="w-10 h-10 items-center justify-center rounded-full bg-white"
+                  style={{
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 4,
+                    elevation: 2,
+                  }}
                 >
-                  <Image source={icons.out} className="h-5 w-5" />
+                  <Image
+                    source={icons.out}
+                    className="h-5 w-5"
+                    tintColor="#6b7280"
+                  />
                 </TouchableOpacity>
               </View>
 
@@ -118,15 +132,26 @@ export default function Home() {
                 textInputBackgroundColor="white"
               />
               <>
-                <Text className="text-xl font-bold mt-5 mb-3">
+                <Text className="text-lg font-JakartaSemiBold text-gray-800 mt-6 mb-3">
                   Your current location
                 </Text>
 
-                <View className="w-full h-[300px] overflow-hidden rounded-2xl">
+                <View
+                  className="w-full h-[300px] overflow-hidden rounded-2xl"
+                  style={{
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 8,
+                    elevation: 3,
+                  }}
+                >
                   <Map />
                 </View>
               </>
-              <Text className="text-lg font-bold mt-5 mb-3">Recent Rides</Text>
+              <Text className="text-lg font-JakartaSemiBold text-gray-800 mt-6 mb-3">
+                Recent Rides
+              </Text>
             </>
           )}
         />

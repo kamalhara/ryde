@@ -27,15 +27,24 @@ export default function RideLayout({ children, title, snapPoints }) {
               style={{ top: insets.top + 12 }}
             >
               <TouchableOpacity onPress={() => router.back()}>
-                <View className="w-10 h-10 items-center justify-center rounded-full bg-white">
+                <View
+                  className="w-10 h-10 items-center justify-center rounded-full bg-white"
+                  style={{
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 4,
+                    elevation: 3,
+                  }}
+                >
                   <Image
                     source={icons.backArrow}
                     resizeMode="contain"
-                    className="w-6 h-6"
+                    className="w-5 h-5"
                   />
                 </View>
               </TouchableOpacity>
-              <Text className="text-xl font-bold ml-5">
+              <Text className="text-xl font-JakartaBold text-gray-900 ml-4">
                 {title || "Go Back"}
               </Text>
             </View>

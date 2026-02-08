@@ -18,68 +18,110 @@ export default function RideCard({
   },
 }) {
   return (
-    <View className="flex flex-row items-center justify-center bg-white rounded-lg shadow-sm mb-3 shadow-neutral-300">
-      <View className="flex flex-col items-center justify-center p-3">
-        <View className="flex flex-row items-center justify-between">
+    <View
+      className="bg-white rounded-2xl mb-4"
+      style={{
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 8,
+        elevation: 3,
+      }}
+    >
+      <View className="p-4">
+        {/* Map & Addresses Section */}
+        <View className="flex flex-row items-center">
           <Image
             source={{
               uri: `https://maps.geoapify.com/v1/staticmap?style=osm-bright&width=600&height=400&center=lonlat:${origin_longitude},${origin_latitude}&zoom=14&marker=lonlat:${origin_longitude},${origin_latitude};type:material;color:%23ff0000;size:large&marker=lonlat:${destination_longitude},${destination_latitude};type:material;color:%2300ff00;size:large&apiKey=${process.env.EXPO_PUBLIC_GEOAPIFY_API_KEY}`,
             }}
-            className="w-[80px] h-[90px] rounded-lg"
+            className="w-[80px] h-[90px] rounded-xl"
           />
 
-          <View className="flex flex-col mx-5 gap-y-5 flex-1">
+          <View className="flex flex-col ml-4 gap-y-4 flex-1">
             <View className="flex flex-row gap-x-2 items-center">
-              <Image source={icons.to} className="w-5 h-5" />
-              <Text className="text-md font-medium" numberOfLines={1}>
+              <View className="w-6 h-6 rounded-full bg-green-50 items-center justify-center">
+                <Image
+                  source={icons.to}
+                  className="w-4 h-4"
+                  tintColor="#16a34a"
+                />
+              </View>
+              <Text
+                className="text-sm font-JakartaMedium text-gray-800 flex-1"
+                numberOfLines={1}
+              >
                 {origin_address}
               </Text>
             </View>
 
             <View className="flex flex-row gap-x-2 items-center">
-              <Image source={icons.point} className="w-5 h-5" />
-              <Text className="text-md font-medium" numberOfLines={1}>
+              <View className="w-6 h-6 rounded-full bg-red-50 items-center justify-center">
+                <Image
+                  source={icons.point}
+                  className="w-4 h-4"
+                  tintColor="#dc2626"
+                />
+              </View>
+              <Text
+                className="text-sm font-JakartaMedium text-gray-800 flex-1"
+                numberOfLines={1}
+              >
                 {destination_address}
               </Text>
             </View>
           </View>
         </View>
 
-        <View className="flex items-center justify-center flex-col w-full mt-5 rounded-lg p-3 ">
-          <View className="flex flex-row items-center justify-between w-full mb-5">
-            <Text className="text-md text-gray-500 font-medium">
+        {/* Divider */}
+        <View className="h-[1px] bg-gray-100 my-4" />
+
+        {/* Details Section */}
+        <View className="space-y-3">
+          <View className="flex flex-row items-center justify-between">
+            <Text className="text-sm font-JakartaMedium text-gray-500">
               Date & Time
             </Text>
-            <Text className="text-md text-gray-500 font-medium">
-              {formatDate(created_at)} {formatTime(ride_time)}
+            <Text className="text-sm font-JakartaSemiBold text-gray-800">
+              {formatDate(created_at)} • {formatTime(ride_time)}
             </Text>
           </View>
 
-          <View className="flex flex-row items-center justify-between w-full mb-5">
-            <Text className="text-md text-gray-500 font-medium">Driver</Text>
-            <Text className="text-md text-gray-500 font-medium">
+          <View className="flex flex-row items-center justify-between mt-3">
+            <Text className="text-sm font-JakartaMedium text-gray-500">
+              Driver
+            </Text>
+            <Text className="text-sm font-JakartaSemiBold text-gray-800">
               {driver.first_name} {driver.last_name}
             </Text>
           </View>
 
-          <View className="flex flex-row items-center justify-between w-full mb-5">
-            <Text className="text-md text-gray-500 font-medium">
-              Car Seats{" "}
+          <View className="flex flex-row items-center justify-between mt-3">
+            <Text className="text-sm font-JakartaMedium text-gray-500">
+              Car Seats
             </Text>
-            <Text className="text-md text-gray-500 font-medium">
+            <Text className="text-sm font-JakartaSemiBold text-gray-800">
               {driver.car_seats}
             </Text>
           </View>
 
-          <View className="flex flex-row items-center justify-between w-full mb-5">
-            <Text className="text-md text-gray-500 font-medium">
-              Payment Status
+          <View className="flex flex-row items-center justify-between mt-3">
+            <Text className="text-sm font-JakartaMedium text-gray-500">
+              Payment
             </Text>
-            <Text
-              className={`text-md font-medium ${payment_status === "Paid" ? "text-green-500" : "text-red-500"}`}
+            <View
+              className={`px-3 py-1 rounded-full ${
+                payment_status === "Paid" ? "bg-green-50" : "bg-red-50"
+              }`}
             >
-              {payment_status}
-            </Text>
+              <Text
+                className={`text-xs font-JakartaSemiBold ${
+                  payment_status === "Paid" ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {payment_status}
+              </Text>
+            </View>
           </View>
         </View>
       </View>

@@ -40,10 +40,20 @@ const CustomButton = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={`w-full rounded-full p-4 flex flex-row justify-center items-center shadow-md shadow-neutral-400/70 ${getBgVariantStyle(bgVariant)} ${className}`}
+      activeOpacity={0.8}
+      className={`w-full rounded-full py-4 px-6 flex flex-row justify-center items-center ${getBgVariantStyle(bgVariant)} ${className}`}
+      style={{
+        shadowColor: bgVariant === "primary" ? "#0286ff" : "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+        elevation: 4,
+      }}
     >
       {iconLeft && iconLeft}
-      <Text className={`text-lg font-bold ${getTextVariantStyle(textVariant)}`}>
+      <Text
+        className={`text-base font-JakartaBold ${getTextVariantStyle(textVariant)}`}
+      >
         {title}
       </Text>
       {iconRight && iconRight}
