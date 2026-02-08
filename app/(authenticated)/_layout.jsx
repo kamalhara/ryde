@@ -13,9 +13,9 @@ export default function AuthenticatedLayout() {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="find-ride" />
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="find-ride" options={{ headerShown: true }} />
     </Stack>
   );
 }
