@@ -1,12 +1,18 @@
-import { useRouter } from "expo-router";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useLocationStore } from "../../store";
 
 export default function FindRide() {
-  const router = useRouter();
+  const {
+    userAddress,
+    destinationAddress,
+    setUserAddress,
+    setDestinationAddress,
+  } = useLocationStore();
   return (
-    <SafeAreaView className=" items-center justify-center">
-      <Text>Find Ride Screen</Text>
+    <SafeAreaView>
+      <Text className="text-xl">You are here : {userAddress}</Text>
+      <Text className="text-xl">You are going to : {destinationAddress}</Text>
     </SafeAreaView>
   );
 }
