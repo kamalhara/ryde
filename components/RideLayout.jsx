@@ -44,7 +44,7 @@ export default function RideLayout({ children, title, snapPoints }) {
                   />
                 </View>
               </TouchableOpacity>
-              <Text className="text-xl font-JakartaBold text-gray-900 ml-4">
+              <Text className="text-xl font-bold text-gray-900 ml-4">
                 {title || "Go Back"}
               </Text>
             </View>

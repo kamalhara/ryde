@@ -48,7 +48,7 @@ export default function RideCard({
                 />
               </View>
               <Text
-                className="text-sm font-JakartaMedium text-gray-800 flex-1"
+                className="text-sm font-medium text-gray-800 flex-1"
                 numberOfLines={1}
               >
                 {origin_address}
@@ -64,7 +64,7 @@ export default function RideCard({
                 />
               </View>
               <Text
-                className="text-sm font-JakartaMedium text-gray-800 flex-1"
+                className="text-sm font-medium text-gray-800 flex-1"
                 numberOfLines={1}
               >
                 {destination_address}
@@ -79,43 +79,37 @@ export default function RideCard({
         {/* Details Section */}
         <View className="space-y-3">
           <View className="flex flex-row items-center justify-between">
-            <Text className="text-sm font-JakartaMedium text-gray-500">
+            <Text className="text-sm font-medium text-gray-500">
               Date & Time
             </Text>
-            <Text className="text-sm font-JakartaSemiBold text-gray-800">
+            <Text className="text-sm font-semibold text-gray-800">
               {formatDate(created_at)} • {formatTime(ride_time)}
             </Text>
           </View>
 
           <View className="flex flex-row items-center justify-between mt-3">
-            <Text className="text-sm font-JakartaMedium text-gray-500">
-              Driver
-            </Text>
-            <Text className="text-sm font-JakartaSemiBold text-gray-800">
+            <Text className="text-sm font-medium text-gray-500">Driver</Text>
+            <Text className="text-sm font-semibold text-gray-800">
               {driver.first_name} {driver.last_name}
             </Text>
           </View>
 
           <View className="flex flex-row items-center justify-between mt-3">
-            <Text className="text-sm font-JakartaMedium text-gray-500">
-              Car Seats
-            </Text>
-            <Text className="text-sm font-JakartaSemiBold text-gray-800">
+            <Text className="text-sm font-medium text-gray-500">Car Seats</Text>
+            <Text className="text-sm font-semibold text-gray-800">
               {driver.car_seats}
             </Text>
           </View>
 
           <View className="flex flex-row items-center justify-between mt-3">
-            <Text className="text-sm font-JakartaMedium text-gray-500">
-              Payment
-            </Text>
+            <Text className="text-sm font-medium text-gray-500">Payment</Text>
             <View
               className={`px-3 py-1 rounded-full ${
                 payment_status === "Paid" ? "bg-green-50" : "bg-red-50"
               }`}
             >
               <Text
-                className={`text-xs font-JakartaSemiBold ${
+                className={`text-xs font-semibold ${
                   payment_status === "Paid" ? "text-green-600" : "text-red-600"
                 }`}
               >

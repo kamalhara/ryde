@@ -98,10 +98,10 @@ export default function Home() {
             <>
               <View className="flex flex-row items-center justify-between my-5">
                 <View>
-                  <Text className="text-sm font-JakartaMedium text-gray-500">
+                  <Text className="text-sm font-medium text-gray-500">
                     Good to see you 👋
                   </Text>
-                  <Text className="text-2xl font-JakartaBold text-gray-900 mt-1">
+                  <Text className="text-2xl font-bold text-gray-900 mt-1">
                     {user?.firstName ||
                       user?.emailAddresses[0].emailAddress.split("@")[0]}
                   </Text>
@@ -132,7 +132,7 @@ export default function Home() {
                 textInputBackgroundColor="white"
               />
               <>
-                <Text className="text-lg font-JakartaSemiBold text-gray-800 mt-6 mb-3">
+                <Text className="text-lg font-semibold text-gray-800 mt-6 mb-3">
                   Your current location
                 </Text>
 
@@ -149,7 +149,7 @@ export default function Home() {
                   <Map />
                 </View>
               </>
-              <Text className="text-lg font-JakartaSemiBold text-gray-800 mt-6 mb-3">
+              <Text className="text-lg font-semibold text-gray-800 mt-6 mb-3">
                 Recent Rides
               </Text>
             </>

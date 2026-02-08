@@ -51,9 +51,7 @@ const CustomButton = ({
       }}
     >
       {iconLeft && iconLeft}
-      <Text
-        className={`text-base font-JakartaBold ${getTextVariantStyle(textVariant)}`}
-      >
+      <Text className={`text-lg font-bold ${getTextVariantStyle(textVariant)}`}>
         {title}
       </Text>
       {iconRight && iconRight}

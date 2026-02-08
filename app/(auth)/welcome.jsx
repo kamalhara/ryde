@@ -17,7 +17,7 @@ export default function Welcome() {
         onPress={() => router.push("/signup")}
         className="w-full flex items-end p-5 justify-end"
       >
-        <Text className="text-black text-md font-JakartaBold">Skip</Text>
+        <Text className="text-black text-md font-bold">Skip</Text>
       </TouchableOpacity>
 
       <Swiper

@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
+import CustomButton from "../../components/CustomButton";
 import DriverCard from "../../components/DriverCard";
 import RideLayout from "../../components/RideLayout";
 import { drivers } from "../../data/driver";
 
-export default function confirmRide() {
+export default function ConfirmRide() {
   const [selected, setSelected] = useState(null);
 
   return (
@@ -19,6 +20,11 @@ export default function confirmRide() {
           />
         )}
         keyExtractor={(item) => String(item.id)}
+        ListFooterComponent={() => (
+          <View className="mx-5 mt-10">
+            <CustomButton title="Confirm Ride" />
+          </View>
+        )}
       />
     </RideLayout>
   );
