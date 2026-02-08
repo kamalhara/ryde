@@ -1,4 +1,4 @@
-export const drivers = [
+export const driversData = [
   {
     id: "1",
     first_name: "James",

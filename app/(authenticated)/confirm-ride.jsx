@@ -1,23 +1,23 @@
 import { router } from "expo-router";
-import { useState } from "react";
 import { FlatList, View } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import DriverCard from "../../components/DriverCard";
 import RideLayout from "../../components/RideLayout";
-import { drivers } from "../../data/driver";
+import { driversData } from "../../data/driver";
+import { useDriverStore } from "../../store";
 
 export default function ConfirmRide() {
-  const [selected, setSelected] = useState(null);
+  const { drivers, selectedDriver, setSelectedDriver } = useDriverStore();
 
   return (
     <RideLayout title="Choose a driver" snapPoints={["65%", "85%"]}>
       <FlatList
-        data={drivers}
+        data={driversData}
         renderItem={({ item }) => (
           <DriverCard
             item={item}
-            selected={selected}
-            setSelected={() => setSelected(item.id)}
+            selected={selectedDriver}
+            setSelected={() => setSelectedDriver(item.id)}
           />
         )}
         keyExtractor={(item) => String(item.id)}
