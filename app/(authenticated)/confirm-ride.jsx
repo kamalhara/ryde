@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { useState } from "react";
 import { FlatList, View } from "react-native";
 import CustomButton from "../../components/CustomButton";
@@ -22,7 +23,10 @@ export default function ConfirmRide() {
         keyExtractor={(item) => String(item.id)}
         ListFooterComponent={() => (
           <View className="mx-5 mt-10">
-            <CustomButton title="Confirm Ride" />
+            <CustomButton
+              title="Select Ride"
+              onPress={() => router.push("./book-ride")}
+            />
           </View>
         )}
       />
