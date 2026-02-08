@@ -109,7 +109,10 @@ export default function OSMSearchBar({
           placeholderTextColor="gray"
           className="px-4 py-3 rounded-full text-base font-semibold"
           style={{
-            backgroundColor: textInputBackgroundColor || "white",
+            backgroundColor:
+              textInputBackgroundColor ||
+              ContainerStyle?.backgroundColor ||
+              "#F0F0F0",
           }}
         />
 

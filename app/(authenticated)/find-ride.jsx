@@ -1,5 +1,7 @@
-import { Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Text, View } from "react-native";
+import OSMSearchBar from "../../components/OsmSearchBar";
+import RideLayout from "../../components/RideLayout";
+import { icons } from "../../constants";
 import { useLocationStore } from "../../store";
 
 export default function FindRide() {
@@ -10,9 +12,29 @@ export default function FindRide() {
     setDestinationAddress,
   } = useLocationStore();
   return (
-    <SafeAreaView>
-      <Text className="text-xl">You are here : {userAddress}</Text>
-      <Text className="text-xl">You are going to : {destinationAddress}</Text>
-    </SafeAreaView>
+    <RideLayout title="Ride">
+      <View className="my-3">
+        <Text className="text-lg font-bold mb-3">From</Text>
+        <OSMSearchBar
+          icon={icons.target}
+          initalLocation={userAddress}
+          ContainerStyle="bg-neutral-100"
+          textInputBackgroundColor="transparent"
+        />
+      </View>
+
+      <View className="my-3">
+        <Text className="text-lg font-bold mb-3">To</Text>
+        <OSMSearchBar
+          icon={icons.map}
+          initalLocation={userAddress}
+          ContainerStyle="bg-neutral-100"
+          textInputBackgroundColor="transparent"
+          onSelect={(location) => {
+            setDestinationAddress(location);
+          }}
+        />
+      </View>
+    </RideLayout>
   );
 }
