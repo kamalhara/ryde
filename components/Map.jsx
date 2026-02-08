@@ -14,7 +14,7 @@ export default function Map() {
     destinationLatitude,
   } = useLocationStore();
 
-  const { selectedDriver, setDrivers } = useDriverStore();
+  const { selectedDriver } = useDriverStore();
   const [markers, setMarkers] = useState([]);
 
   const region = calculateRegion({

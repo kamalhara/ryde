@@ -1,4 +1,6 @@
+import { router } from "expo-router";
 import { Text, View } from "react-native";
+import CustomButton from "../../components/CustomButton";
 import OSMSearchBar from "../../components/OsmSearchBar";
 import RideLayout from "../../components/RideLayout";
 import { icons } from "../../constants";
@@ -8,11 +10,11 @@ export default function FindRide() {
   const {
     userAddress,
     destinationAddress,
-    setUserAddress,
-    setDestinationAddress,
+    setUserLocation,
+    setDestinationLocation,
   } = useLocationStore();
   return (
-    <RideLayout title="Ride">
+    <RideLayout title="Ride" snapPoints={["85%"]}>
       <View className="my-3">
         <Text className="text-lg font-bold mb-3">From</Text>
         <OSMSearchBar
@@ -20,6 +22,9 @@ export default function FindRide() {
           initalLocation={userAddress}
           ContainerStyle="bg-neutral-100"
           textInputBackgroundColor="transparent"
+          onSelect={(location) => {
+            setUserLocation(location);
+          }}
         />
       </View>
 
@@ -27,14 +32,19 @@ export default function FindRide() {
         <Text className="text-lg font-bold mb-3">To</Text>
         <OSMSearchBar
           icon={icons.map}
-          initalLocation={userAddress}
+          initalLocation={destinationAddress}
           ContainerStyle="bg-neutral-100"
           textInputBackgroundColor="transparent"
           onSelect={(location) => {
-            setDestinationAddress(location);
+            setDestinationLocation(location);
           }}
         />
       </View>
+      <CustomButton
+        title="Find Now"
+        className="mt-5 "
+        onPress={() => router.push("./confirm-ride")}
+      />
     </RideLayout>
   );
 }
