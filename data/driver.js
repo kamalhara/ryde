@@ -68,3 +68,6 @@ export const driversData = [
     member_since: "2020",
   },
 ];
+
+// Alias for backward compatibility
+export const drivers = driversData;
