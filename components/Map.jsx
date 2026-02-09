@@ -1,10 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import { StyleSheet } from "react-native";
-import MapView, { Marker, Polyline, PROVIDER_DEFAULT } from "react-native-maps";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import { icons } from "../constants";
 import { driversData } from "../data/driver";
 import { calculateRegion, generateMarkersFromData } from "../lib/map";
 import { useDriverStore, useLocationStore } from "../store";
+
+// Only import react-native-maps on native platforms
+let MapView, Marker, Polyline, PROVIDER_DEFAULT;
+if (Platform.OS !== "web") {
+  const Maps = require("react-native-maps");
+  MapView = Maps.default;
+  Marker = Maps.Marker;
+  Polyline = Maps.Polyline;
+  PROVIDER_DEFAULT = Maps.PROVIDER_DEFAULT;
+}
 
 export default function Map() {
   const {
@@ -106,6 +115,15 @@ export default function Map() {
     fetchRoute();
   }, [userLatitude, userLongitude, destinationLatitude, destinationLongitude]);
 
+  // Web fallback
+  if (Platform.OS === "web") {
+    return (
+      <View style={[styles.map, styles.webFallback]}>
+        <Text style={styles.webText}>Map is only available on mobile</Text>
+      </View>
+    );
+  }
+
   return (
     <MapView
       ref={mapRef}
@@ -164,5 +182,14 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 16,
+  },
+  webFallback: {
+    backgroundColor: "#e5e5e5",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  webText: {
+    color: "#666",
+    fontSize: 16,
   },
 });

@@ -1,14 +1,7 @@
 import { useSignUp } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import {
-  Alert,
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, Image, ScrollView, Text, View } from "react-native";
 import ReactNativeModal from "react-native-modal";
 import CustomButton from "../../components/CustomButton";
 import InputField from "../../components/InputField";
@@ -192,12 +185,6 @@ export default function Signup() {
             />
           )}
 
-          <TouchableOpacity
-            className="mt-4 w-full "
-            onPress={() => router.push("/home")}
-          >
-            <Text className="text-blue-500 text-center">Dev login</Text>
-          </TouchableOpacity>
           <OAuth />
           <Link
             href="/login"
