@@ -49,7 +49,7 @@ export default function Welcome() {
       </Swiper>
       <CustomButton
         title={isLastSlide ? "Get Started" : "Next"}
-        className="w-11/12 mt-10 "
+        className="w-10/12 mt-10 "
         onPress={() => {
           if (isLastSlide) {
             router.push("/signup");

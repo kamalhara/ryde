@@ -1,7 +1,7 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
-import { icons } from "@/constants";
-import { formatTime } from "@/lib/utils";
+import { icons } from "../constants";
+import { formatTime } from "../lib/utils";
 
 const DriverCard = ({ item, selected, setSelected }) => {
   const isSelected = selected === item.id;
