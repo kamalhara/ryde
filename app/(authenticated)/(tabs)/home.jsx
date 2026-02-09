@@ -16,7 +16,7 @@ import Map from "../../../components/Map";
 import OSMSearchBar from "../../../components/OsmSearchBar";
 import RideCard from "../../../components/RideCard";
 import { icons, images } from "../../../constants";
-import rides from "../../../data/rides";
+import { useFetch } from "../../../lib/fetch";
 import { useLocationStore } from "../../../store";
 
 export default function Home() {
@@ -24,6 +24,8 @@ export default function Home() {
   const isLoading = false;
   const { setUserLocation, setDestinationLocation } = useLocationStore();
   const mapRef = useRef(null);
+
+  const { data: rides, loading } = useFetch(`/(api)/ride/${user?.id}`);
 
   const moveToLocation = (location) => {
     mapRef.current?.animateToRegion({
@@ -68,7 +70,7 @@ export default function Home() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <SafeAreaView className="bg-general-500 flex-1">
         <FlatList
-          data={rides.slice(0, 5)}
+          data={rides?.slice(0, 5) || []}
           renderItem={({ item }) => (
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <View>

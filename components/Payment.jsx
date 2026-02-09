@@ -1,21 +1,68 @@
+import { useUser } from "@clerk/clerk-expo";
 import { router } from "expo-router";
 import { useState } from "react";
-import { Image, Text, View } from "react-native";
+import { Alert, Image, Text, View } from "react-native";
 import ReactNativeModal from "react-native-modal";
 import { images } from "../constants";
+import { fetchAPI } from "../lib/fetch";
 import CustomButton from "./CustomButton";
 
-export default function Payment() {
+export default function Payment({
+  fullName,
+  email,
+  driverId,
+  rideTime,
+  amount,
+  userLatitude,
+  userLongitude,
+  userAddress,
+  destinationLatitude,
+  destinationLongitude,
+  destinationAddress,
+}) {
+  const { user } = useUser();
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleBookRide = async () => {
+    setLoading(true);
+    try {
+      const response = await fetchAPI("/(api)/ride/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          origin_address: userAddress,
+          destination_address: destinationAddress,
+          origin_latitude: userLatitude,
+          origin_longitude: userLongitude,
+          destination_latitude: destinationLatitude,
+          destination_longitude: destinationLongitude,
+          ride_time: rideTime,
+          fare_price: parseFloat(amount) * 100, // Store as cents
+          payment_status: "paid",
+          driver_id: driverId,
+          user_id: user?.id,
+        }),
+      });
+
+      setSuccess(true);
+    } catch (error) {
+      console.error("Booking error:", error);
+      Alert.alert("Error", "Failed to book ride. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <CustomButton
-        title="Confirm Booking"
+        title={loading ? "Booking..." : "Confirm Booking"}
         className="mt-2"
-        onPress={() => {
-          // Handle booking confirmation
-          setSuccess(true);
-        }}
+        disabled={loading}
+        onPress={handleBookRide}
       />
 
       <ReactNativeModal
@@ -23,7 +70,7 @@ export default function Payment() {
         onBackdropPress={() => setSuccess(false)}
       >
         <View className="flex flex-col items-center justify-center bg-white p-7 rounded-2xl">
-          <Image source={images.check} className="w-28 h-28  mt-5" />
+          <Image source={images.check} className="w-28 h-28 mt-5" />
           <Text className="text-2xl font-bold text-center mt-5">
             Ride Booked Successfully
           </Text>

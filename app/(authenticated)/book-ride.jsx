@@ -9,7 +9,14 @@ import { useDriverStore, useLocationStore } from "../../store";
 
 const BookRide = () => {
   const { user } = useUser();
-  const { userAddress, destinationAddress } = useLocationStore();
+  const {
+    userAddress,
+    userLatitude,
+    userLongitude,
+    destinationAddress,
+    destinationLatitude,
+    destinationLongitude,
+  } = useLocationStore();
   const { selectedDriver } = useDriverStore();
 
   // Get driver details from driversData using selectedDriver id
@@ -240,7 +247,19 @@ const BookRide = () => {
           />
         </View>
 
-        <Payment />
+        <Payment
+          fullName={user?.fullName || user?.firstName || "User"}
+          email={user?.emailAddresses?.[0]?.emailAddress}
+          driverId={selectedDriver}
+          rideTime={estimatedTime}
+          amount={estimatedPrice}
+          userLatitude={userLatitude}
+          userLongitude={userLongitude}
+          userAddress={userAddress}
+          destinationLatitude={destinationLatitude}
+          destinationLongitude={destinationLongitude}
+          destinationAddress={destinationAddress}
+        />
 
         <View className="items-center mt-4">
           <Text
