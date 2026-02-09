@@ -105,7 +105,12 @@ const DriverCard = ({ item, selected, setSelected }) => {
           className="h-16 w-20"
           resizeMode="contain"
         />
-        <Text className="text-xs font-medium text-gray-400 mt-1">Premium</Text>
+        <Text
+          className="text-xs font-medium text-gray-500 mt-1"
+          numberOfLines={1}
+        >
+          {item.car_model || item.car_type || "Standard"}
+        </Text>
       </View>
     </TouchableOpacity>
   );

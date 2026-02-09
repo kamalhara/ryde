@@ -1,7 +1,7 @@
 import { useUser } from "@clerk/clerk-expo";
 import { router } from "expo-router";
 import { Image, ScrollView, Text, View } from "react-native";
-import CustomButton from "../../components/CustomButton";
+import Payment from "../../components/Payment";
 import RideLayout from "../../components/RideLayout";
 import { icons } from "../../constants";
 import { driversData } from "../../data/driver";
@@ -91,11 +91,19 @@ const BookRide = () => {
               </View>
 
               {/* Car Image */}
-              <Image
-                source={{ uri: driverDetails.car_image_url }}
-                className="w-20 h-16"
-                resizeMode="contain"
-              />
+              <View className="items-center">
+                <Image
+                  source={{ uri: driverDetails.car_image_url }}
+                  className="w-20 h-16"
+                  resizeMode="contain"
+                />
+                <Text
+                  className="text-xs font-JakartaMedium text-gray-500 mt-1"
+                  numberOfLines={1}
+                >
+                  {driverDetails.car_model || driverDetails.car_type}
+                </Text>
+              </View>
             </View>
           </View>
         ) : (
@@ -182,7 +190,6 @@ const BookRide = () => {
           }}
         >
           <View className="flex flex-row justify-between">
-            {/* Price */}
             <View className="flex-1 items-center border-r border-green-400">
               <Text className="text-green-200 text-sm font-JakartaMedium">
                 Estimated Fare
@@ -233,14 +240,7 @@ const BookRide = () => {
           />
         </View>
 
-        <CustomButton
-          title="Confirm Booking"
-          className="mt-2"
-          onPress={() => {
-            // Handle booking confirmation
-            router.push("/(authenticated)/(tabs)/rides");
-          }}
-        />
+        <Payment />
 
         <View className="items-center mt-4">
           <Text
