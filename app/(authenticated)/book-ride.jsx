@@ -17,11 +17,9 @@ const BookRide = () => {
     (driver) => driver.id === String(selectedDriver),
   );
 
-  // Calculate estimated values (since not in data)
-  const estimatedPrice = driverDetails
-    ? (15 + Math.random() * 10).toFixed(2)
-    : "0.00";
-  const estimatedTime = driverDetails ? Math.floor(5 + Math.random() * 15) : 0;
+  // Get price and time from driver data
+  const estimatedPrice = driverDetails?.price?.toFixed(2) || "0.00";
+  const estimatedTime = driverDetails?.time || 0;
 
   return (
     <RideLayout title="Book Ride" snapPoints={["70%", "90%"]}>
@@ -194,7 +192,6 @@ const BookRide = () => {
               </Text>
             </View>
 
-            {/* Time */}
             <View className="flex-1 items-center">
               <Text className="text-green-200 text-sm font-JakartaMedium">
                 Pickup Time
@@ -206,7 +203,6 @@ const BookRide = () => {
           </View>
         </View>
 
-        {/* Payment Method */}
         <View
           className="bg-white rounded-3xl p-4 mb-6 flex-row items-center justify-between"
           style={{
@@ -237,7 +233,6 @@ const BookRide = () => {
           />
         </View>
 
-        {/* Confirm Button */}
         <CustomButton
           title="Confirm Booking"
           className="mt-2"
@@ -247,7 +242,6 @@ const BookRide = () => {
           }}
         />
 
-        {/* Cancel Link */}
         <View className="items-center mt-4">
           <Text
             className="text-gray-500 font-JakartaMedium"
