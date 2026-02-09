@@ -1,4 +1,4 @@
-import { useUser } from "@clerk/clerk-expo";
+import { useAuth, useUser } from "@clerk/clerk-expo";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
@@ -24,7 +24,7 @@ export default function Home() {
   const isLoading = false;
   const { setUserLocation, setDestinationLocation } = useLocationStore();
   const mapRef = useRef(null);
-
+  const { signOut } = useAuth();
   const { data: rides, loading } = useFetch(`/(api)/ride/${user?.id}`);
 
   const moveToLocation = (location) => {
@@ -38,7 +38,8 @@ export default function Home() {
 
   const router = useRouter();
   const handleSignOut = () => {
-    // Implement sign-out logic here
+    signOut();
+    router.push("(auth)/signup");
   };
   const handleDestinationSearch = (location) => {
     setDestinationLocation(location);
