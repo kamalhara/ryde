@@ -1,52 +1,134 @@
-# Welcome to your Expo app 👋
+# 🚗 Ryde — Ride-Hailing Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A full-stack ride-hailing mobile application built with **React Native** and **Expo**, featuring real-time maps, secure authentication, and a seamless booking experience.
 
-## Get started
+---
 
-1. Install dependencies
+## 📸 Screenshots
+
+<p align="center">
+  <img src="./assets/images/welcomeScreen.png" alt="Welcome Screen" width="200"/>
+  &nbsp;&nbsp;
+  <img src="./assets/images/signupScreen.png" alt="Sign Up Screen" width="200"/>
+  &nbsp;&nbsp;
+  <img src="./assets/images/homeScreen.png" alt="Home Screen" width="200"/>
+</p>
+
+<p align="center">
+  <img src="./assets/images/selectRideScreen.png" alt="Select Ride Screen" width="200"/>
+  &nbsp;&nbsp;
+  <img src="./assets/images/confirmBookingScreen.png" alt="Confirm Booking Screen" width="200"/>
+</p>
+
+---
+
+## ✨ Features
+
+- **Onboarding Flow** — Beautiful swipeable onboarding screens to introduce the app
+- **Authentication** — Secure sign-up & login with email and Google OAuth via Clerk
+- **Home Screen** — Interactive map with live location tracking and nearby drivers
+- **Ride Search** — Search for destinations with autocomplete powered by OpenStreetMap
+- **Ride Selection** — Browse available drivers, view ratings, pricing, and estimated time
+- **Ride Booking** — Confirm and book rides with route directions displayed on the map
+- **Ride History** — View past rides with details like origin, destination, date, and driver info
+- **Profile & Chat** — User profile management and in-app chat tabs
+- **Bottom Tab Navigation** — Smooth bottom tab bar with Home, Rides, Chat, and Profile
+
+---
+
+## 🛠 Tech Stack
+
+| Category         | Technology                                                                               |
+| ---------------- | ---------------------------------------------------------------------------------------- |
+| **Framework**    | [React Native](https://reactnative.dev/) + [Expo SDK 54](https://expo.dev/)              |
+| **Routing**      | [Expo Router](https://docs.expo.dev/router/introduction/) (file-based)                   |
+| **Styling**      | [NativeWind](https://www.nativewind.dev/) (TailwindCSS for React Native)                 |
+| **Auth**         | [Clerk](https://clerk.com/)                                                              |
+| **Database**     | [Neon (Serverless Postgres)](https://neon.tech/)                                         |
+| **Maps**         | [React Native Maps](https://github.com/react-native-maps/react-native-maps) + Directions |
+| **State**        | [Zustand](https://zustand-demo.pmnd.rs/)                                                 |
+| **Animations**   | [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/)           |
+| **Bottom Sheet** | [@gorhom/bottom-sheet](https://gorhom.github.io/react-native-bottom-sheet/)              |
+| **Payments**     | Stripe (via custom integration)                                                          |
+
+---
+
+## 📁 Project Structure
+
+```
+ryde/
+├── app/
+│   ├── (api)/              # API routes (driver, ride endpoints)
+│   ├── (auth)/             # Auth screens (welcome, login, signup)
+│   ├── (authenticated)/    # Protected screens
+│   │   ├── (tabs)/         # Tab screens (home, rides, chat, profile)
+│   │   ├── find-ride.jsx   # Search for rides
+│   │   ├── confirm-ride.jsx# Confirm ride details
+│   │   └── book-ride.jsx   # Book & pay for ride
+│   ├── _layout.jsx         # Root layout
+│   └── index.jsx           # Entry point
+├── components/             # Reusable UI components
+│   ├── Map.jsx             # Map with markers & directions
+│   ├── DriverCard.jsx      # Driver info card
+│   ├── RideCard.jsx        # Ride history card
+│   ├── Payment.jsx         # Payment component
+│   ├── OsmSearchBar.jsx    # Location search bar
+│   └── ...
+├── constants/              # App constants
+├── lib/                    # Utility functions
+├── store/                  # Zustand state management
+└── assets/                 # Images, icons, fonts
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18+)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+- iOS Simulator / Android Emulator / Physical device
+
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/yourusername/ryde.git
+   cd ryde
+   ```
+
+2. **Install dependencies**
 
    ```bash
    npm install
    ```
 
-2. Start the app
+3. **Set up environment variables**
+
+   Create a `.env` file in the root directory with:
+
+   ```env
+   EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_key
+   DATABASE_URL=your_neon_database_url
+   EXPO_PUBLIC_GOOGLE_API_KEY=your_google_api_key
+   EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_key
+   ```
+
+4. **Start the development server**
 
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+5. **Run on device**
+   - Press `i` to open in iOS Simulator
+   - Press `a` to open in Android Emulator
+   - Scan the QR code with Expo Go on your phone
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 📄 License
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
-# ryde
-# ryde
+This project is for educational and personal use.

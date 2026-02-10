@@ -11,7 +11,7 @@ import "../global.css";
 SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
-  anchor: "(tabs)",
+  anchor: "(authenticated)",
 };
 
 export default function RootLayout() {
