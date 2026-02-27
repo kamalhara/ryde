@@ -15,7 +15,11 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.kamalhara.ryde"
+      "bundleIdentifier": "com.kamalhara.ryde",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app uses your location to find nearby rides and show your position on the map.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app uses your location to find nearby rides and track your trip in the background."
+      }
     },
     "android": {
       "adaptiveIcon": {
