@@ -1,4 +1,4 @@
-import { Label, NativeTabs } from "expo-router/unstable-native-tabs";
+import { Icon, Label, NativeTabs } from "expo-router/unstable-native-tabs";
 import { Image, View } from "react-native";
 
 const TabsLayout = () => {
@@ -25,15 +25,19 @@ const TabsLayout = () => {
     <NativeTabs>
       <NativeTabs.Trigger name="home">
         <Label>Home</Label>
+        <Icon sf="house.fill" />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="rides">
         <Label>Rides</Label>
+        <Icon sf="list.bullet.clipboard.fill" />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="chat">
         <Label>Chat</Label>
+        <Icon sf="message.fill" />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="profile">
         <Label>Profile</Label>
+        <Icon sf="person.fill" />
       </NativeTabs.Trigger>
     </NativeTabs>
     // <Tabs
