@@ -51,6 +51,14 @@
             "backgroundColor": "#2F80ED"
           }
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "This app uses your location to find nearby rides and track your trip in the background.",
+          "locationWhenInUsePermission": "This app uses your location to find nearby rides and show your position on the map.",
+          "locationAlwaysPermission": "This app uses your location to track your trip even when the app is in the background."
+        }
       ]
     ],
     "experiments": {
