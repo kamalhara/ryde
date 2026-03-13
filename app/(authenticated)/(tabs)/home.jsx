@@ -108,7 +108,11 @@ export default function Home() {
               <View className="flex flex-row items-center justify-between my-5">
                 <View>
                   <Text className="text-sm font-medium text-gray-500">
-                    Good to see you 👋
+                    {new Date().getHours() > 12 && new Date().getHours() < 18
+                      ? "Good Afternoon 👋"
+                      : new Date().getHours() > 18 && new Date().getHours() < 24
+                        ? "Good Evening 👋"
+                        : "Good Morning 👋"}
                   </Text>
                   <Text className="text-2xl font-bold text-gray-900 mt-1">
                     {user?.firstName ||
