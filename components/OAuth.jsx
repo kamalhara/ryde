@@ -3,7 +3,7 @@ import * as AuthSession from "expo-auth-session";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import { useCallback } from "react";
-import { Alert, Image, Text, View } from "react-native";
+import { Alert, Image, Platform, Text, View } from "react-native";
 import { icons } from "../constants";
 import { fetchAPI } from "../lib/fetch";
 import CustomButton from "./CustomButton";
@@ -127,27 +127,29 @@ const OAuth = () => {
       />
 
       {/* Apple Sign In */}
-      <CustomButton
-        title="Continue with Apple"
-        className="w-full mt-3 bg-black"
-        textVariant="default"
-        iconLeft={
-          <Text
-            style={{
-              fontSize: 20,
-              color: "#fff",
-              marginRight: 8,
-              marginTop: -2,
-            }}
-          >
-            
-          </Text>
-        }
-        onPress={handleAppleLogin}
-        onPressIn={() =>
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-        }
-      />
+      {Platform.OS === "ios" && (
+        <CustomButton
+          title="Continue with Apple"
+          className="w-full mt-3 bg-black"
+          textVariant="default"
+          iconLeft={
+            <Text
+              style={{
+                fontSize: 20,
+                color: "#fff",
+                marginRight: 8,
+                marginTop: -2,
+              }}
+            >
+              
+            </Text>
+          }
+          onPress={handleAppleLogin}
+          onPressIn={() =>
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+          }
+        />
+      )}
     </View>
   );
 };

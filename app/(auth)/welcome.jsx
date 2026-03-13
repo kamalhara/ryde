@@ -143,9 +143,7 @@ export default function Welcome() {
             >
               <View
                 className={`h-2 rounded-full ${
-                  index === activeIndex
-                    ? "w-8 bg-[#0286ff]"
-                    : "w-2 bg-gray-200"
+                  index === activeIndex ? "w-8 bg-[#0286ff]" : "w-2 bg-gray-200"
                 }`}
               />
             </TouchableOpacity>
