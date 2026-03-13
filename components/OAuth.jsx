@@ -1,5 +1,6 @@
 import { useSSO } from "@clerk/clerk-expo";
 import * as AuthSession from "expo-auth-session";
+import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import { useCallback } from "react";
 import { Alert, Image, Text, View } from "react-native";
@@ -58,6 +59,7 @@ const OAuth = () => {
         textVariant="primary"
         iconLeft={<Image source={icons.google} className="w-5 h-5 mx-2" />}
         onPress={handleGoogleLogin}
+        onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)}
       />
     </View>
   );

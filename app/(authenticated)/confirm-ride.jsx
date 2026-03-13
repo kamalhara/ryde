@@ -1,3 +1,4 @@
+import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { FlatList, View } from "react-native";
 import CustomButton from "../../components/CustomButton";
@@ -17,7 +18,10 @@ export default function ConfirmRide() {
           <DriverCard
             item={item}
             selected={selectedDriver}
-            setSelected={() => setSelectedDriver(item.id)}
+            setSelected={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              setSelectedDriver(item.id);
+            }}
           />
         )}
         keyExtractor={(item) => String(item.id)}
@@ -26,6 +30,7 @@ export default function ConfirmRide() {
             <CustomButton
               title="Select Ride"
               onPress={() => router.push("./book-ride")}
+              onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)}
             />
           </View>
         )}

@@ -1,5 +1,6 @@
 import { useAuth, useUser } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
+import * as Haptics from "expo-haptics";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { icons } from "../../../constants";
@@ -119,6 +120,7 @@ export default function Profile() {
             <TouchableOpacity
               key={index}
               activeOpacity={0.7}
+              onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
               className={`flex flex-row items-center px-5 py-4 ${
                 index < menuItems.length - 1 ? "border-b border-gray-100" : ""
               }`}
@@ -151,6 +153,7 @@ export default function Profile() {
         {/* Sign Out Button */}
         <TouchableOpacity
           onPress={handleSignOut}
+          onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
           activeOpacity={0.8}
           className="bg-red-500 rounded-full py-4 mt-6 items-center"
           style={{

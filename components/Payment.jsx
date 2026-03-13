@@ -1,4 +1,5 @@
 import { useUser } from "@clerk/clerk-expo";
+import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { useState } from "react";
 import { Alert, Image, Text, View } from "react-native";
@@ -48,6 +49,7 @@ export default function Payment({
       });
 
       setSuccess(true);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (error) {
       console.error("Booking error:", error);
       Alert.alert("Error", "Failed to book ride. Please try again.");
@@ -63,6 +65,7 @@ export default function Payment({
         className="mt-2"
         disabled={loading}
         onPress={handleBookRide}
+        onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)}
       />
 
       <ReactNativeModal
@@ -83,6 +86,7 @@ export default function Payment({
               setSuccess(false);
               router.push("/(authenticated)/(tabs)/home");
             }}
+            onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
             className="mt-5"
           />
         </View>

@@ -1,3 +1,4 @@
+import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { Text, View } from "react-native";
 import CustomButton from "../../components/CustomButton";
@@ -44,6 +45,7 @@ export default function FindRide() {
         title="Find Now"
         className="mt-5 "
         onPress={() => router.push("./confirm-ride")}
+        onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)}
       />
     </RideLayout>
   );

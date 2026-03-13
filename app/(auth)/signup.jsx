@@ -1,4 +1,5 @@
 import { useSignUp } from "@clerk/clerk-expo";
+import * as Haptics from "expo-haptics";
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, Button, Image, ScrollView, Text, View } from "react-native";
@@ -174,12 +175,14 @@ export default function Signup() {
               title="Sign Up"
               className="mt-6"
               onPress={onSignUpPress}
+              onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)}
             />
           ) : (
             <CustomButton
               title="Sign Up"
               className="mt-6"
               onPress={() => {
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
                 Alert.alert("Error", "Please fill all fields");
               }}
             />
@@ -187,6 +190,7 @@ export default function Signup() {
           <Button
             title="Dev Login"
             onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
               const { devLogin } = require("../../store").useDevAuthStore.getState();
               devLogin();
               router.replace("/(authenticated)/(tabs)/home");
@@ -237,6 +241,7 @@ export default function Signup() {
               title="Verify"
               className="mt-5 bg-green-600"
               onPress={onVerifyPress}
+              onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)}
             />
           </View>
         </ReactNativeModal>
@@ -255,6 +260,7 @@ export default function Signup() {
               title="Browse home"
               className="mt-5"
               onPress={() => {
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                 setShowSuccessModal(false);
                 router.push("/home");
               }}

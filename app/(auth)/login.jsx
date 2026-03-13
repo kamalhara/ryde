@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
+import * as Haptics from "expo-haptics";
 import React, { useState } from "react";
 import { Alert, Image, ScrollView, Text, View } from "react-native";
 import CustomButton from "../../components/CustomButton";
@@ -173,6 +174,7 @@ export default function Login() {
             title="Login"
             className="mt-6"
             onPress={onSignInPress}
+            onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)}
           />
         </View>
 

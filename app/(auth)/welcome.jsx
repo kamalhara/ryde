@@ -1,3 +1,4 @@
+import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
@@ -57,6 +58,7 @@ export default function Welcome() {
             swiperRef.current.scrollBy(1);
           }
         }}
+        onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
       />
     </SafeAreaView>
   );

@@ -1,4 +1,5 @@
 import { useAuth, useUser } from "@clerk/clerk-expo";
+import * as Haptics from "expo-haptics";
 import * as Location from "expo-location";
 import { useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
@@ -114,9 +115,9 @@ export default function Home() {
                   <Text className="text-sm font-medium text-gray-500">
                     {new Date().getHours() > 12 && new Date().getHours() < 18
                       ? "Good Afternoon 👋"
-                      : new Date().getHours() > 18 && new Date().getHours() < 24
-                        ? "Good Evening 👋"
-                        : "Good Morning 👋"}
+                      : new Date().getHours() < 12 && new Date().getHours() < 18
+                        ? "Good Morning 👋"
+                        : "Good Afternoon 👋"}
                   </Text>
                   <Text className="text-2xl font-bold text-gray-900 mt-1">
                     {user?.firstName ||
@@ -125,6 +126,9 @@ export default function Home() {
                 </View>
                 <TouchableOpacity
                   onPress={handleSignOut}
+                  onPressIn={() =>
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+                  }
                   className="w-10 h-10 items-center justify-center rounded-full bg-white"
                   style={{
                     shadowColor: "#000",
