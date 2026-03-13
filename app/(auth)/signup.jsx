@@ -35,6 +35,21 @@ const fetchAPI = async (url, options) => {
   }
 };
 
+const getPasswordStrength = (password) => {
+  if (!password) return { level: 0, label: "", color: "transparent" };
+  let score = 0;
+  if (password.length >= 6) score++;
+  if (password.length >= 10) score++;
+  if (/[A-Z]/.test(password)) score++;
+  if (/[0-9]/.test(password)) score++;
+  if (/[^A-Za-z0-9]/.test(password)) score++;
+
+  if (score <= 1) return { level: 1, label: "Weak", color: "#ef4444" };
+  if (score <= 2) return { level: 2, label: "Fair", color: "#f59e0b" };
+  if (score <= 3) return { level: 3, label: "Good", color: "#0286ff" };
+  return { level: 4, label: "Strong", color: "#22c55e" };
+};
+
 export default function Signup() {
   const [form, setForm] = useState({
     name: "",
@@ -180,6 +195,35 @@ export default function Signup() {
               onChangeText={(value) => setForm({ ...form, password: value })}
             />
 
+            {/* Password Strength Indicator */}
+            {form.password.length > 0 && (
+              <View className="mt-1 mb-2">
+                <View className="flex-row gap-x-1.5">
+                  {[1, 2, 3, 4].map((bar) => (
+                    <View
+                      key={bar}
+                      className="flex-1 h-1.5 rounded-full"
+                      style={{
+                        backgroundColor:
+                          bar <= getPasswordStrength(form.password).level
+                            ? getPasswordStrength(form.password).color
+                            : "#e5e7eb",
+                      }}
+                    />
+                  ))}
+                </View>
+                <Text
+                  className="text-xs mt-1.5"
+                  style={{
+                    fontFamily: "Jakarta-Medium",
+                    color: getPasswordStrength(form.password).color,
+                  }}
+                >
+                  {getPasswordStrength(form.password).label}
+                </Text>
+              </View>
+            )}
+
             {/* Sign Up Button */}
             <CustomButton
               title="Sign Up"
@@ -216,7 +260,7 @@ export default function Signup() {
             <OAuth />
 
             {/* Login Link */}
-            <View className="flex-row justify-center mt-8 mb-4">
+            <View className="flex-row justify-center mt-8 mb-2">
               <Text className="text-gray-500 text-base">
                 Already have an account?{" "}
               </Text>
@@ -231,6 +275,16 @@ export default function Signup() {
                 </TouchableOpacity>
               </Link>
             </View>
+
+            {/* Terms of Service */}
+            <Text
+              className="text-center text-gray-300 text-xs mt-4 mb-4 px-6 leading-5"
+              style={{ fontFamily: "Jakarta-Medium" }}
+            >
+              By signing up, you agree to our{" "}
+              <Text className="text-[#0286ff]">Terms of Service</Text> and{" "}
+              <Text className="text-[#0286ff]">Privacy Policy</Text>
+            </Text>
           </View>
 
           {/* Verification Modal */}

@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Switch,
   Text,
   TouchableOpacity,
   View,
@@ -27,9 +28,12 @@ export default function Login() {
   const router = useRouter();
   const [showEmailCode, setShowEmailCode] = useState(false);
   const [code, setCode] = React.useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSignInPress = React.useCallback(async () => {
     if (!isLoaded) return;
+    setIsLoading(true);
 
     try {
       const signInAttempt = await signIn.create({
@@ -45,6 +49,9 @@ export default function Login() {
               console.log(session?.currentTask);
               return;
             }
+            Haptics.notificationAsync(
+              Haptics.NotificationFeedbackType.Success,
+            );
             router.push("/home");
           },
         });
@@ -97,6 +104,8 @@ export default function Login() {
         "Error",
         "Login failed. Please check your credentials and try again.",
       );
+    } finally {
+      setIsLoading(false);
     }
   }, [isLoaded, signIn, setActive, router, form.email, form.password]);
 
@@ -179,17 +188,51 @@ export default function Login() {
               onChangeText={(value) => setForm({ ...form, password: value })}
             />
 
-            {/* Forgot Password */}
-            <TouchableOpacity className="self-end mt-1 mb-2">
-              <Text className="text-[#0286ff] text-sm font-semibold">
-                Forgot Password?
-              </Text>
-            </TouchableOpacity>
+            {/* Remember Me & Forgot Password Row */}
+            <View className="flex-row items-center justify-between mt-2 mb-2">
+              <TouchableOpacity
+                className="flex-row items-center"
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  setRememberMe(!rememberMe);
+                }}
+                activeOpacity={0.7}
+              >
+                <Switch
+                  value={rememberMe}
+                  onValueChange={(val) => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setRememberMe(val);
+                  }}
+                  trackColor={{ false: "#e5e7eb", true: "#bfdbfe" }}
+                  thumbColor={rememberMe ? "#0286ff" : "#f4f4f5"}
+                  ios_backgroundColor="#e5e7eb"
+                  style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
+                />
+                <Text
+                  className="text-gray-500 text-sm ml-1"
+                  style={{ fontFamily: "Jakarta-Medium" }}
+                >
+                  Remember me
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity>
+                <Text
+                  className="text-[#0286ff] text-sm"
+                  style={{ fontFamily: "Jakarta-SemiBold" }}
+                >
+                  Forgot Password?
+                </Text>
+              </TouchableOpacity>
+            </View>
 
             <CustomButton
               title="Log In"
               className="mt-4"
               onPress={onSignInPress}
+              loading={isLoading}
+              disabled={isLoading}
               onPressIn={() =>
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
               }
