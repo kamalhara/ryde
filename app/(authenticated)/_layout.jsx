@@ -1,14 +1,16 @@
 import { useAuth } from "@clerk/clerk-expo";
 import { Redirect, Stack } from "expo-router";
+import { useDevAuthStore } from "../../store";
 
 export default function AuthenticatedLayout() {
   const { isSignedIn, isLoaded } = useAuth();
+  const isDevLoggedIn = useDevAuthStore((s) => s.isDevLoggedIn);
 
-  if (!isLoaded) {
+  if (!isLoaded && !isDevLoggedIn) {
     return null;
   }
 
-  if (!isSignedIn) {
+  if (!isSignedIn && !isDevLoggedIn) {
     return <Redirect href="/(auth)/welcome" />;
   }
 
@@ -21,3 +23,4 @@ export default function AuthenticatedLayout() {
     </Stack>
   );
 }
+

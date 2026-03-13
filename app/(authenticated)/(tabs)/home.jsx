@@ -17,10 +17,12 @@ import OSMSearchBar from "../../../components/OsmSearchBar";
 import RideCard from "../../../components/RideCard";
 import { icons, images } from "../../../constants";
 import { useFetch } from "../../../lib/fetch";
-import { useLocationStore } from "../../../store";
+import { useDevAuthStore, useLocationStore } from "../../../store";
 
 export default function Home() {
-  const { user } = useUser();
+  const { user: clerkUser } = useUser();
+  const { isDevLoggedIn, devUser, devLogout } = useDevAuthStore();
+  const user = isDevLoggedIn ? devUser : clerkUser;
   const isLoading = false;
   const { setUserLocation, setDestinationLocation } = useLocationStore();
   const mapRef = useRef(null);
@@ -38,8 +40,12 @@ export default function Home() {
 
   const router = useRouter();
   const handleSignOut = () => {
-    signOut();
-    router.push("(auth)/signup");
+    if (isDevLoggedIn) {
+      devLogout();
+    } else {
+      signOut();
+    }
+    router.replace("/(auth)/signup");
   };
   const handleDestinationSearch = (location) => {
     setDestinationLocation(location);

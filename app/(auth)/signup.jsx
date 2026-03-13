@@ -1,7 +1,7 @@
 import { useSignUp } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, Image, ScrollView, Text, View } from "react-native";
+import { Alert, Button, Image, ScrollView, Text, View } from "react-native";
 import ReactNativeModal from "react-native-modal";
 import CustomButton from "../../components/CustomButton";
 import InputField from "../../components/InputField";
@@ -184,7 +184,15 @@ export default function Signup() {
               }}
             />
           )}
-
+          <Button
+            title="Dev Login"
+            onPress={() => {
+              const { devLogin } = require("../../store").useDevAuthStore.getState();
+              devLogin();
+              router.replace("/(authenticated)/(tabs)/home");
+            }}
+            className="text-center  text-lg  text-gray-500"
+          />
           <OAuth />
           <Link
             href="/login"

@@ -2,10 +2,13 @@ import { useUser } from "@clerk/clerk-expo";
 import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../../constants";
+import { useDevAuthStore } from "../../../store";
 import { useFetch } from "../../../lib/fetch";
 
 export default function Chat() {
-  const { user } = useUser();
+  const { user: clerkUser } = useUser();
+  const { isDevLoggedIn, devUser } = useDevAuthStore();
+  const user = isDevLoggedIn ? devUser : clerkUser;
   const { data: rides, loading } = useFetch(`/(api)/ride/${user?.id}`);
 
   // Extract unique drivers from ride history to show conversations

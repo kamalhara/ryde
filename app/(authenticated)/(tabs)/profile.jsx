@@ -3,17 +3,24 @@ import { useRouter } from "expo-router";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { icons } from "../../../constants";
+import { useDevAuthStore } from "../../../store";
 import { useFetch } from "../../../lib/fetch";
 
 export default function Profile() {
-  const { user } = useUser();
+  const { user: clerkUser } = useUser();
   const { signOut } = useAuth();
+  const { isDevLoggedIn, devUser, devLogout } = useDevAuthStore();
+  const user = isDevLoggedIn ? devUser : clerkUser;
   const router = useRouter();
   const { data: rides } = useFetch(`/(api)/ride/${user?.id}`);
 
   const handleSignOut = () => {
-    signOut();
-    router.push("(auth)/signup");
+    if (isDevLoggedIn) {
+      devLogout();
+    } else {
+      signOut();
+    }
+    router.replace("/(auth)/signup");
   };
 
   const menuItems = [
