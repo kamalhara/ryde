@@ -1,9 +1,18 @@
-/* eslint-disable no-unused-vars */
 import { useSignIn } from "@clerk/clerk-expo";
-import { Link, useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
+import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Alert, Image, ScrollView, Text, View } from "react-native";
+import {
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import ReactNativeModal from "react-native-modal";
 import CustomButton from "../../components/CustomButton";
 import InputField from "../../components/InputField";
 import OAuth from "../../components/OAuth";
@@ -22,34 +31,24 @@ export default function Login() {
   const onSignInPress = React.useCallback(async () => {
     if (!isLoaded) return;
 
-    // Start the sign-in process using the email and password provided
     try {
       const signInAttempt = await signIn.create({
         identifier: form.email,
         password: form.password,
       });
 
-      // If sign-in process is complete, set the created session as active
-      // and redirect the user
       if (signInAttempt.status === "complete") {
         await setActive({
           session: signInAttempt.createdSessionId,
           navigate: async ({ session }) => {
             if (session?.currentTask) {
-              // Check for tasks and navigate to custom UI to help users resolve them
-              // See https://clerk.com/docs/guides/development/custom-flows/authentication/session-tasks
               console.log(session?.currentTask);
               return;
             }
-
             router.push("/home");
           },
         });
       } else if (signInAttempt.status === "needs_second_factor") {
-        // Check if email_code is a valid second factor
-        // This is required when Client Trust is enabled and the user
-        // is signing in from a new device.
-        // See https://clerk.com/docs/guides/secure/client-trust
         const emailCodeFactor = signInAttempt.supportedSecondFactors?.find(
           (factor) => factor.strategy === "email_code",
         );
@@ -62,29 +61,23 @@ export default function Login() {
           setShowEmailCode(true);
         }
       } else {
-        // If the status is not complete, check why. User may need to
-        // complete further steps.
         Alert.alert(
           "Error",
           "Sign-in not complete. " + JSON.stringify(signInAttempt, null, 2),
         );
       }
     } catch (err) {
-      // See https://clerk.com/docs/guides/development/custom-flows/error-handling
-      // for more info on error handling
       console.error("Auth error:", err);
       const message =
         err?.errors?.[0]?.longMessage || err?.message || JSON.stringify(err);
 
       const lower = String(message).toLowerCase();
 
-      // Only redirect to home for explicit "already signed in/logged in" messages
       if (/already (signed in|logged in)/i.test(message)) {
         router.replace("/home");
         return;
       }
 
-      // Friendly message for common credential errors
       if (
         lower.includes("invalid") ||
         lower.includes("wrong") ||
@@ -95,11 +88,11 @@ export default function Login() {
         lower.includes("password") ||
         lower.includes("credentials")
       ) {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
         Alert.alert("Error", "Invalid email or password");
         return;
       }
 
-      // For any other unknown error, show a generic message instead of raw error
       Alert.alert(
         "Error",
         "Login failed. Please check your credentials and try again.",
@@ -107,7 +100,6 @@ export default function Login() {
     }
   }, [isLoaded, signIn, setActive, router, form.email, form.password]);
 
-  // Handle the submission of the email verification code
   const onVerifyPress = React.useCallback(async () => {
     if (!isLoaded) return;
 
@@ -122,12 +114,9 @@ export default function Login() {
           session: signInAttempt.createdSessionId,
           navigate: async ({ session }) => {
             if (session?.currentTask) {
-              // Check for tasks and navigate to custom UI to help users resolve them
-              // See https://clerk.com/docs/guides/development/custom-flows/authentication/session-tasks
               console.log(session?.currentTask);
               return;
             }
-
             router.replace("/");
           },
         });
@@ -140,55 +129,156 @@ export default function Login() {
   }, [isLoaded, signIn, setActive, router, code]);
 
   return (
-    <ScrollView className="bg-white">
-      <View className="flex-1 bg-white">
-        <View className="relative w-full h-[250px]">
-          <Image source={images.signUpCar} className="z-0 w-full h-[250px]" />
-          <Text className="absolute  text-black bottom-5 left-5 text-2xl font-semibold">
-            Welcome Back
-          </Text>
-        </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1"
+    >
+      <ScrollView
+        className="bg-white"
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+      >
+        <View className="flex-1 bg-white">
+          {/* Hero Section */}
+          <View className="relative w-full h-[280px]">
+            <Image
+              source={images.signUpCar}
+              className="w-full h-full"
+              resizeMode="cover"
+            />
+            <View className="absolute bottom-0 left-0 right-0 px-6 pb-5">
+              <Text
+                className="text-gray-900 text-3xl font-bold"
+                style={{ fontFamily: "Jakarta-Bold" }}
+              >
+                Welcome{"\n"}back
+              </Text>
+              <Text className="text-gray-500 text-sm mt-1">
+                Log in to continue your ride
+              </Text>
+            </View>
+          </View>
 
-        <View className="p-5">
-          <InputField
-            label="Email"
-            placeholder="Enter your email"
-            icon={icons.email}
-            value={form.email}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            onChangeText={(value) => {
-              setForm({ ...form, email: value });
-            }}
-          />
-          <InputField
-            label="Password"
-            placeholder="Enter your password"
-            icon={icons.lock}
-            value={form.password}
-            onChangeText={(value) => {
-              setForm({ ...form, password: value });
-            }}
-          />
-          <CustomButton
-            title="Login"
-            className="mt-6"
-            onPress={onSignInPress}
-            onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)}
-          />
-        </View>
+          {/* Form Section */}
+          <View className="px-6 pt-6 pb-4">
+            <InputField
+              label="Email"
+              placeholder="Enter your email"
+              icon={icons.email}
+              value={form.email}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              onChangeText={(value) => setForm({ ...form, email: value })}
+            />
+            <InputField
+              label="Password"
+              placeholder="Enter your password"
+              icon={icons.lock}
+              value={form.password}
+              secureTextEntry
+              onChangeText={(value) => setForm({ ...form, password: value })}
+            />
 
-        <OAuth />
-        <Link
-          href="/signup"
-          className="text-center  text-lg  text-gray-500 mt-10"
-        >
-          <Text className="text-md font-semibold">
-            Don&apos;t have an account?{" "}
-            <Text className="text-blue-500">Sign Up</Text>
-          </Text>
-        </Link>
-      </View>
-    </ScrollView>
+            {/* Forgot Password */}
+            <TouchableOpacity className="self-end mt-1 mb-2">
+              <Text className="text-[#0286ff] text-sm font-semibold">
+                Forgot Password?
+              </Text>
+            </TouchableOpacity>
+
+            <CustomButton
+              title="Log In"
+              className="mt-4"
+              onPress={onSignInPress}
+              onPressIn={() =>
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+              }
+            />
+
+            <OAuth />
+
+            {/* Sign Up Link */}
+            <View className="flex-row justify-center mt-8 mb-4">
+              <Text className="text-gray-500 text-base">
+                Don&apos;t have an account?{" "}
+              </Text>
+              <Link href="/signup" asChild>
+                <TouchableOpacity>
+                  <Text
+                    className="text-[#0286ff] text-base font-bold"
+                    style={{ fontFamily: "Jakarta-Bold" }}
+                  >
+                    Sign Up
+                  </Text>
+                </TouchableOpacity>
+              </Link>
+            </View>
+          </View>
+
+          {/* 2FA Verification Modal */}
+          <ReactNativeModal
+            isVisible={showEmailCode}
+            backdropOpacity={0.5}
+            animationIn="slideInUp"
+            animationOut="slideOutDown"
+          >
+            <View
+              className="bg-white px-7 py-8 rounded-3xl"
+              style={{
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 10 },
+                shadowOpacity: 0.15,
+                shadowRadius: 20,
+                elevation: 10,
+              }}
+            >
+              <View className="w-16 h-16 bg-blue-50 rounded-full items-center justify-center self-center mb-5">
+                <Image
+                  source={icons.lock}
+                  className="w-7 h-7"
+                  tintColor="#0286ff"
+                />
+              </View>
+
+              <Text
+                className="text-2xl text-center text-gray-900 mb-2"
+                style={{ fontFamily: "Jakarta-Bold" }}
+              >
+                Two-Factor Auth
+              </Text>
+              <Text className="text-gray-400 text-center mb-6 text-sm">
+                Enter the verification code sent to your email
+              </Text>
+
+              <InputField
+                label="Verification Code"
+                placeholder="Enter code"
+                icon={icons.lock}
+                keyboardType="numeric"
+                value={code}
+                onChangeText={setCode}
+              />
+
+              <CustomButton
+                title="Verify"
+                className="mt-5"
+                bgVariant="success"
+                onPress={onVerifyPress}
+                onPressIn={() =>
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                }
+              />
+
+              <TouchableOpacity
+                onPress={() => setShowEmailCode(false)}
+                className="mt-4 items-center py-2"
+              >
+                <Text className="text-gray-400 text-sm">Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </ReactNativeModal>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

@@ -46,11 +46,16 @@ const OAuth = () => {
   }, [startSSOFlow, router]);
 
   return (
-    <View className="w-full">
-      <View className="flex-row flex items-center justify-center mt-4">
-        <View className="flex-1 h-[1px] bg-gray-300" />
-        <Text className="text-lg mx-3">Or</Text>
-        <View className="flex-1 h-[1px] bg-gray-300" />
+    <View className="w-full mt-6">
+      <View className="flex-row items-center justify-center">
+        <View className="flex-1 h-[1px] bg-gray-200" />
+        <Text
+          className="text-gray-400 text-sm mx-4"
+          style={{ fontFamily: "Jakarta-Medium" }}
+        >
+          or continue with
+        </Text>
+        <View className="flex-1 h-[1px] bg-gray-200" />
       </View>
       <CustomButton
         title="Sign in with Google"

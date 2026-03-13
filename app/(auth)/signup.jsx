@@ -2,7 +2,16 @@ import { useSignUp } from "@clerk/clerk-expo";
 import * as Haptics from "expo-haptics";
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, Button, Image, ScrollView, Text, View } from "react-native";
+import {
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import ReactNativeModal from "react-native-modal";
 import CustomButton from "../../components/CustomButton";
 import InputField from "../../components/InputField";
@@ -42,50 +51,33 @@ export default function Signup() {
     error: "",
   });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  // Handle submission of sign-up form
+
   const onSignUpPress = async () => {
     if (!isLoaded) return;
-
-    // Start sign-up process using email and password provided
     try {
       await signUp.create({
         emailAddress: form.email,
         password: form.password,
       });
-
-      // Send user an email with verification code
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-
-      // Set 'pendingVerification' to true to display second form
-      // and capture code
       setVerification({ ...verification, state: "pending" });
     } catch (err) {
-      // See https://clerk.com/docs/guides/development/custom-flows/error-handling
-      // for more info on error handling
       const message =
         err?.errors?.[0]?.longMessage || err?.message || JSON.stringify(err);
-
       if (String(message).toLowerCase().includes("already")) {
         router.replace("/home");
         return;
       }
-
       Alert.alert("Error", message);
     }
   };
 
-  // Handle submission of verification form
   const onVerifyPress = async () => {
     if (!isLoaded) return;
-
     try {
-      // Use the code the user provided to attempt verification
       const signUpAttempt = await signUp.attemptEmailAddressVerification({
         code: verification.code,
       });
-
-      // If verification was completed, set the session to active
-      // and redirect the user
       if (signUpAttempt.status === "complete") {
         await fetchAPI("(api)/user", {
           method: "POST",
@@ -99,175 +91,284 @@ export default function Signup() {
           session: signUpAttempt.createdSessionId,
           navigate: async ({ session }) => {
             if (session?.currentTask) {
-              // Check for tasks and navigate to custom UI to help users resolve them
-              // See https://clerk.com/docs/guides/development/custom-flows/authentication/session-tasks
               console.log(session?.currentTask);
               return;
             }
-
             setVerification({ ...verification, state: "success" });
           },
         });
       } else {
-        // If the status is not complete, check why. User may need to
         setVerification({
           ...verification,
           error: "Verification failed. Please try again.",
         });
-        // complete further steps.
         console.error(JSON.stringify(signUpAttempt, null, 2));
       }
     } catch (err) {
-      // See https://clerk.com/docs/guides/development/custom-flows/error-handling
-      // for more info on error handling
       const message =
         err?.errors?.[0]?.longMessage || err?.message || JSON.stringify(err);
-
       if (String(message).toLowerCase().includes("already")) {
         router.replace("/home");
         return;
       }
-
       console.error(JSON.stringify(err, null, 2));
     }
   };
 
   return (
-    <ScrollView className="bg-white">
-      <View className="flex-1 bg-white">
-        <View className="relative w-full h-[250px]">
-          <Image source={images.signUpCar} className="z-0 w-full h-[250px]" />
-          <Text className="absolute  text-black bottom-5 left-5 text-2xl font-semibold">
-            Create your account
-          </Text>
-        </View>
-
-        <View className="p-5">
-          <InputField
-            label="Name"
-            placeholder="Enter your name"
-            icon={icons.person}
-            value={form.name}
-            onChangeText={(value) => {
-              setForm({ ...form, name: value });
-            }}
-          />
-          <InputField
-            label="Email"
-            placeholder="Enter your email"
-            icon={icons.email}
-            value={form.email}
-            onChangeText={(value) => {
-              setForm({ ...form, email: value });
-            }}
-          />
-          <InputField
-            label="Password"
-            placeholder="Enter your password"
-            icon={icons.lock}
-            value={form.password}
-            onChangeText={(value) => {
-              setForm({ ...form, password: value });
-            }}
-          />
-          {form.name && form.email && form.password ? (
-            <CustomButton
-              title="Sign Up"
-              className="mt-6"
-              onPress={onSignUpPress}
-              onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)}
-            />
-          ) : (
-            <CustomButton
-              title="Sign Up"
-              className="mt-6"
-              onPress={() => {
-                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-                Alert.alert("Error", "Please fill all fields");
-              }}
-            />
-          )}
-          <Button
-            title="Dev Login"
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-              const { devLogin } = require("../../store").useDevAuthStore.getState();
-              devLogin();
-              router.replace("/(authenticated)/(tabs)/home");
-            }}
-            className="text-center  text-lg  text-gray-500"
-          />
-          <OAuth />
-          <Link
-            href="/login"
-            className="text-center  text-lg  text-gray-500 mt-10"
-          >
-            <Text className="text-md font-semibold">
-              Already have an account?{" "}
-              <Text className="text-blue-500">Login</Text>
-            </Text>
-          </Link>
-        </View>
-
-        <ReactNativeModal
-          isVisible={verification.state === "pending"}
-          onModalHide={() => {
-            if (verification.state === "success") {
-              setShowSuccessModal(true);
-            }
-          }}
-        >
-          <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
-            <Text className="font-bold text-2xl mb-2"> Verification</Text>
-            <Text className="mb-5">
-              We have sent a verification code to {form.email}.
-            </Text>
-            <InputField
-              label="Code"
-              placeholder="123456"
-              icon={icons.lock}
-              keyBoardType="numeric"
-              value={verification.code}
-              onChangeText={(code) => {
-                setVerification({ ...verification, code });
-              }}
-            />
-            {verification.error && (
-              <Text className="text-red-500 mt-1 text-sm">
-                {verification.error}
-              </Text>
-            )}
-            <CustomButton
-              title="Verify"
-              className="mt-5 bg-green-600"
-              onPress={onVerifyPress}
-              onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)}
-            />
-          </View>
-        </ReactNativeModal>
-
-        <ReactNativeModal isVisible={showSuccessModal}>
-          <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1"
+    >
+      <ScrollView
+        className="bg-white"
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+      >
+        <View className="flex-1 bg-white">
+          {/* Hero Section */}
+          <View className="relative w-full h-[280px]">
             <Image
-              source={images.check}
-              className="w-[110px] h-[110px] self-center my-5 mx-auto"
+              source={images.signUpCar}
+              className="w-full h-full"
+              resizeMode="cover"
             />
-            <Text className="text-center text-3xl font-bold">Verified</Text>
-            <Text className="text-center text-gray-500 mt-2 text-base">
-              Your have successfully verified your account.
-            </Text>
-            <CustomButton
-              title="Browse home"
-              className="mt-5"
-              onPress={() => {
-                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                setShowSuccessModal(false);
-                router.push("/home");
+            {/* Gradient overlay */}
+            <View
+              className="absolute bottom-0 left-0 right-0 h-32"
+              style={{
+                backgroundColor: "transparent",
               }}
             />
+            <View className="absolute bottom-0 left-0 right-0 px-6 pb-5">
+              <Text
+                className="text-gray-900 text-3xl font-bold"
+                style={{ fontFamily: "Jakarta-Bold" }}
+              >
+                Create your{"\n"}account
+              </Text>
+              <Text className="text-gray-500 text-sm mt-1">
+                Sign up to get started with Ryde
+              </Text>
+            </View>
           </View>
-        </ReactNativeModal>
-      </View>
-    </ScrollView>
+
+          {/* Form Section */}
+          <View className="px-6 pt-6 pb-4">
+            <InputField
+              label="Full Name"
+              placeholder="Enter your name"
+              icon={icons.person}
+              value={form.name}
+              onChangeText={(value) => setForm({ ...form, name: value })}
+            />
+            <InputField
+              label="Email"
+              placeholder="Enter your email"
+              icon={icons.email}
+              value={form.email}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              onChangeText={(value) => setForm({ ...form, email: value })}
+            />
+            <InputField
+              label="Password"
+              placeholder="Enter your password"
+              icon={icons.lock}
+              value={form.password}
+              secureTextEntry
+              onChangeText={(value) => setForm({ ...form, password: value })}
+            />
+
+            {/* Sign Up Button */}
+            <CustomButton
+              title="Sign Up"
+              className="mt-6"
+              onPress={
+                form.name && form.email && form.password
+                  ? onSignUpPress
+                  : () => {
+                      Haptics.notificationAsync(
+                        Haptics.NotificationFeedbackType.Warning,
+                      );
+                      Alert.alert("Error", "Please fill all fields");
+                    }
+              }
+              onPressIn={() =>
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+              }
+            />
+
+            {/* Dev Login - subtle */}
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                const { devLogin } =
+                  require("../../store").useDevAuthStore.getState();
+                devLogin();
+                router.replace("/(authenticated)/(tabs)/home");
+              }}
+              className="mt-3 py-2 items-center"
+            >
+              <Text className="text-gray-400 text-xs">Dev Login →</Text>
+            </TouchableOpacity>
+
+            <OAuth />
+
+            {/* Login Link */}
+            <View className="flex-row justify-center mt-8 mb-4">
+              <Text className="text-gray-500 text-base">
+                Already have an account?{" "}
+              </Text>
+              <Link href="/login" asChild>
+                <TouchableOpacity>
+                  <Text
+                    className="text-[#0286ff] text-base font-bold"
+                    style={{ fontFamily: "Jakarta-Bold" }}
+                  >
+                    Log In
+                  </Text>
+                </TouchableOpacity>
+              </Link>
+            </View>
+          </View>
+
+          {/* Verification Modal */}
+          <ReactNativeModal
+            isVisible={verification.state === "pending"}
+            onModalHide={() => {
+              if (verification.state === "success") {
+                setShowSuccessModal(true);
+              }
+            }}
+            backdropOpacity={0.5}
+            animationIn="slideInUp"
+            animationOut="slideOutDown"
+          >
+            <View
+              className="bg-white px-7 py-8 rounded-3xl"
+              style={{
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 10 },
+                shadowOpacity: 0.15,
+                shadowRadius: 20,
+                elevation: 10,
+              }}
+            >
+              {/* Icon */}
+              <View className="w-16 h-16 bg-blue-50 rounded-full items-center justify-center self-center mb-5">
+                <Image
+                  source={icons.lock}
+                  className="w-7 h-7"
+                  tintColor="#0286ff"
+                />
+              </View>
+
+              <Text
+                className="text-2xl text-center text-gray-900 mb-2"
+                style={{ fontFamily: "Jakarta-Bold" }}
+              >
+                Verification
+              </Text>
+              <Text className="text-gray-400 text-center mb-6 text-sm">
+                We&apos;ve sent a 6-digit code to{"\n"}
+                <Text className="text-gray-600 font-semibold">
+                  {form.email}
+                </Text>
+              </Text>
+
+              <InputField
+                label="Verification Code"
+                placeholder="Enter 6-digit code"
+                icon={icons.lock}
+                keyboardType="numeric"
+                value={verification.code}
+                onChangeText={(code) =>
+                  setVerification({ ...verification, code })
+                }
+              />
+
+              {verification.error && (
+                <View className="bg-red-50 rounded-xl px-4 py-3 mt-2 flex-row items-center">
+                  <Text className="text-red-500 text-sm flex-1">
+                    {verification.error}
+                  </Text>
+                </View>
+              )}
+
+              <CustomButton
+                title="Verify Email"
+                className="mt-5"
+                bgVariant="success"
+                onPress={onVerifyPress}
+                onPressIn={() =>
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                }
+              />
+
+              <TouchableOpacity className="mt-4 items-center py-2">
+                <Text className="text-gray-400 text-sm">
+                  Didn&apos;t receive the code?{" "}
+                  <Text className="text-[#0286ff] font-semibold">Resend</Text>
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ReactNativeModal>
+
+          {/* Success Modal */}
+          <ReactNativeModal
+            isVisible={showSuccessModal}
+            backdropOpacity={0.5}
+            animationIn="zoomIn"
+            animationOut="zoomOut"
+          >
+            <View
+              className="bg-white px-7 py-8 rounded-3xl items-center"
+              style={{
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 10 },
+                shadowOpacity: 0.15,
+                shadowRadius: 20,
+                elevation: 10,
+              }}
+            >
+              {/* Success checkmark with ring */}
+              <View className="w-28 h-28 rounded-full bg-green-50 items-center justify-center mb-5">
+                <View className="w-20 h-20 rounded-full bg-green-100 items-center justify-center">
+                  <Image
+                    source={images.check}
+                    className="w-14 h-14"
+                    resizeMode="contain"
+                  />
+                </View>
+              </View>
+
+              <Text
+                className="text-2xl text-gray-900 text-center"
+                style={{ fontFamily: "Jakarta-Bold" }}
+              >
+                You&apos;re all set!
+              </Text>
+              <Text className="text-gray-400 text-center mt-2 text-sm px-4">
+                Your account has been verified successfully. Welcome to Ryde!
+              </Text>
+
+              <CustomButton
+                title="Start Riding"
+                className="mt-6 w-full"
+                bgVariant="success"
+                onPress={() => {
+                  Haptics.notificationAsync(
+                    Haptics.NotificationFeedbackType.Success,
+                  );
+                  setShowSuccessModal(false);
+                  router.push("/home");
+                }}
+              />
+            </View>
+          </ReactNativeModal>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
