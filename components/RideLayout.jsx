@@ -1,4 +1,5 @@
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { useRef } from "react";
 import {
@@ -21,20 +22,25 @@ export default function RideLayout({ children, title, snapPoints }) {
     <GestureHandlerRootView>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View className="flex-1 bg-white">
-          <View className="flex flex-col h-screen bg-blue-500">
+          <View className="flex flex-col h-screen bg-gray-100">
             <View
               className="absolute left-0 right-0 flex flex-row items-center justify-start px-5 z-10"
               style={{ top: insets.top + 12 }}
             >
-              <TouchableOpacity onPress={() => router.back()}>
+              <TouchableOpacity
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  router.back();
+                }}
+              >
                 <View
                   className="w-10 h-10 items-center justify-center rounded-full bg-white"
                   style={{
                     shadowColor: "#000",
                     shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.1,
-                    shadowRadius: 4,
-                    elevation: 3,
+                    shadowOpacity: 0.12,
+                    shadowRadius: 6,
+                    elevation: 4,
                   }}
                 >
                   <Image
@@ -44,7 +50,10 @@ export default function RideLayout({ children, title, snapPoints }) {
                   />
                 </View>
               </TouchableOpacity>
-              <Text className="text-xl font-bold text-gray-900 ml-4">
+              <Text
+                className="text-xl text-gray-900 ml-4"
+                style={{ fontFamily: "Jakarta-Bold" }}
+              >
                 {title || "Go Back"}
               </Text>
             </View>
@@ -55,6 +64,22 @@ export default function RideLayout({ children, title, snapPoints }) {
             snapPoints={snapPoints || ["40%", "85%"]}
             index={1}
             keyboardBehavior="extend"
+            handleIndicatorStyle={{
+              backgroundColor: "#d1d5db",
+              width: 40,
+              height: 4,
+              borderRadius: 2,
+            }}
+            backgroundStyle={{
+              borderTopLeftRadius: 24,
+              borderTopRightRadius: 24,
+              backgroundColor: "#fff",
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: -4 },
+              shadowOpacity: 0.1,
+              shadowRadius: 12,
+              elevation: 8,
+            }}
           >
             <BottomSheetView style={{ flex: 1, padding: 20 }}>
               <TouchableWithoutFeedback

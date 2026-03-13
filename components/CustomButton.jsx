@@ -1,4 +1,5 @@
-import { Text, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
+
 const getBgVariantStyle = (variant) => {
   switch (variant) {
     case "secondary":
@@ -28,6 +29,20 @@ const getTextVariantStyle = (variant) => {
       return "text-white";
   }
 };
+
+const getShadowColor = (variant) => {
+  switch (variant) {
+    case "danger":
+      return "#ef4444";
+    case "success":
+      return "#22c55e";
+    case "outline":
+      return "#000";
+    default:
+      return "#0286ff";
+  }
+};
+
 const CustomButton = ({
   title,
   onPress,
@@ -37,26 +52,40 @@ const CustomButton = ({
   iconLeft,
   iconRight,
   onPressIn,
+  disabled = false,
+  loading = false,
 }) => {
   return (
     <TouchableOpacity
-      onPress={onPress}
-      onPressIn={onPressIn}
-      activeOpacity={0.8}
+      onPress={disabled || loading ? null : onPress}
+      onPressIn={disabled || loading ? null : onPressIn}
+      activeOpacity={disabled || loading ? 1 : 0.8}
       className={`w-full rounded-full py-4 px-6 flex flex-row justify-center items-center ${getBgVariantStyle(bgVariant)} ${className}`}
       style={{
-        shadowColor: bgVariant === "primary" ? "#0286ff" : "#000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 8,
-        elevation: 4,
+        shadowColor: disabled ? "transparent" : getShadowColor(bgVariant),
+        shadowOffset: { width: 0, height: disabled ? 0 : 4 },
+        shadowOpacity: disabled ? 0 : 0.25,
+        shadowRadius: disabled ? 0 : 10,
+        elevation: disabled ? 0 : 5,
+        opacity: disabled ? 0.5 : 1,
       }}
     >
-      {iconLeft && iconLeft}
-      <Text className={`text-lg font-bold ${getTextVariantStyle(textVariant)}`}>
-        {title}
+      {loading ? (
+        <ActivityIndicator
+          color={textVariant === "primary" ? "#000" : "#fff"}
+          size="small"
+          style={{ marginRight: title ? 8 : 0 }}
+        />
+      ) : (
+        iconLeft && iconLeft
+      )}
+      <Text
+        className={`text-lg font-bold ${getTextVariantStyle(textVariant)}`}
+        style={{ fontFamily: "Jakarta-Bold" }}
+      >
+        {loading ? "Please wait..." : title}
       </Text>
-      {iconRight && iconRight}
+      {!loading && iconRight && iconRight}
     </TouchableOpacity>
   );
 };

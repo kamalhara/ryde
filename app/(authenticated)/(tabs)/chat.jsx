@@ -57,8 +57,16 @@ export default function Chat() {
         contentContainerStyle={{ paddingBottom: 100 }}
         ListHeaderComponent={() => (
           <View className="my-5">
-            <Text className="text-2xl font-bold text-gray-900">Messages</Text>
-            <Text className="text-sm text-gray-500 mt-1">
+            <Text
+              className="text-2xl text-gray-900"
+              style={{ fontFamily: "Jakarta-Bold" }}
+            >
+              Messages
+            </Text>
+            <Text
+              className="text-sm text-gray-400 mt-1"
+              style={{ fontFamily: "Jakarta-Medium" }}
+            >
               Chat with your drivers
             </Text>
           </View>
@@ -87,7 +95,10 @@ export default function Chat() {
             {/* Message Content */}
             <View className="flex-1 ml-4">
               <View className="flex flex-row items-center justify-between">
-                <Text className="text-base font-semibold text-gray-900">
+                <Text
+                  className="text-base text-gray-900"
+                  style={{ fontFamily: "Jakarta-SemiBold" }}
+                >
                   {item.driverName}
                 </Text>
                 <Text className="text-xs text-gray-400">

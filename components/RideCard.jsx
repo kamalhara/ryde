@@ -19,7 +19,7 @@ export default function RideCard({
 }) {
   return (
     <View
-      className="bg-white rounded-2xl mb-4"
+      className="bg-white rounded-2xl mb-4 overflow-hidden"
       style={{
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
@@ -28,6 +28,9 @@ export default function RideCard({
         elevation: 3,
       }}
     >
+      {/* Accent bar */}
+      <View className="h-1 bg-[#0286ff]" />
+
       <View className="p-4">
         {/* Map & Addresses Section */}
         <View className="flex flex-row items-center">
@@ -48,8 +51,9 @@ export default function RideCard({
                 />
               </View>
               <Text
-                className="text-sm font-medium text-gray-800 flex-1"
+                className="text-sm text-gray-800 flex-1"
                 numberOfLines={1}
+                style={{ fontFamily: "Jakarta-SemiBold" }}
               >
                 {origin_address}
               </Text>
@@ -64,8 +68,9 @@ export default function RideCard({
                 />
               </View>
               <Text
-                className="text-sm font-medium text-gray-800 flex-1"
+                className="text-sm text-gray-800 flex-1"
                 numberOfLines={1}
+                style={{ fontFamily: "Jakarta-SemiBold" }}
               >
                 {destination_address}
               </Text>
@@ -77,41 +82,69 @@ export default function RideCard({
         <View className="h-[1px] bg-gray-100 my-4" />
 
         {/* Details Section */}
-        <View className="space-y-3">
+        <View className="gap-y-3">
           <View className="flex flex-row items-center justify-between">
-            <Text className="text-sm font-medium text-gray-500">
+            <Text
+              className="text-xs text-gray-400 uppercase tracking-wide"
+              style={{ fontFamily: "Jakarta-Medium" }}
+            >
               Date & Time
             </Text>
-            <Text className="text-sm font-semibold text-gray-800">
+            <Text
+              className="text-sm text-gray-800"
+              style={{ fontFamily: "Jakarta-SemiBold" }}
+            >
               {formatDate(created_at)} • {formatTime(ride_time)}
             </Text>
           </View>
 
-          <View className="flex flex-row items-center justify-between mt-3">
-            <Text className="text-sm font-medium text-gray-500">Driver</Text>
-            <Text className="text-sm font-semibold text-gray-800">
+          <View className="flex flex-row items-center justify-between">
+            <Text
+              className="text-xs text-gray-400 uppercase tracking-wide"
+              style={{ fontFamily: "Jakarta-Medium" }}
+            >
+              Driver
+            </Text>
+            <Text
+              className="text-sm text-gray-800"
+              style={{ fontFamily: "Jakarta-SemiBold" }}
+            >
               {driver.first_name} {driver.last_name}
             </Text>
           </View>
 
-          <View className="flex flex-row items-center justify-between mt-3">
-            <Text className="text-sm font-medium text-gray-500">Car Seats</Text>
-            <Text className="text-sm font-semibold text-gray-800">
-              {driver.car_seats}
+          <View className="flex flex-row items-center justify-between">
+            <Text
+              className="text-xs text-gray-400 uppercase tracking-wide"
+              style={{ fontFamily: "Jakarta-Medium" }}
+            >
+              Fare
+            </Text>
+            <Text
+              className="text-base text-[#0286ff]"
+              style={{ fontFamily: "Jakarta-Bold" }}
+            >
+              ${(fare_price / 100).toFixed(2)}
             </Text>
           </View>
 
-          <View className="flex flex-row items-center justify-between mt-3">
-            <Text className="text-sm font-medium text-gray-500">Payment</Text>
+          <View className="flex flex-row items-center justify-between">
+            <Text
+              className="text-xs text-gray-400 uppercase tracking-wide"
+              style={{ fontFamily: "Jakarta-Medium" }}
+            >
+              Status
+            </Text>
             <View
               className={`px-3 py-1 rounded-full ${
                 payment_status === "Paid" ? "bg-green-50" : "bg-red-50"
               }`}
             >
               <Text
-                className={`text-xs font-semibold ${
+                className={`text-xs ${
                   payment_status === "Paid" ? "text-green-600" : "text-red-600"
                 }`}
+                style={{ fontFamily: "Jakarta-Bold" }}
               >
                 {payment_status}
               </Text>

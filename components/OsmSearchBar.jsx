@@ -58,7 +58,6 @@ export default function OSMSearchBar({
 
   const handleBlur = () => {
     setIsFocused(false);
-    // Delay clearing results to allow selection
     setTimeout(() => {
       if (!isFocused) {
         setResults([]);
@@ -67,7 +66,6 @@ export default function OSMSearchBar({
   };
 
   const handleSearchPress = () => {
-    // Select first result if available
     if (results.length > 0) {
       handleSelectLocation(results[0]);
     }
@@ -75,7 +73,6 @@ export default function OSMSearchBar({
 
   const handleSubmitEditing = () => {
     Keyboard.dismiss();
-    // Select first result if available
     if (results.length > 0) {
       handleSelectLocation(results[0]);
     }
@@ -83,7 +80,12 @@ export default function OSMSearchBar({
 
   return (
     <View
-      className={`${ContainerStyle} flex flex-row items-center justify-start gap-2 px-4 mb-5 relative z-50`}
+      className={`flex flex-row items-center justify-start gap-2 px-4 mb-5 relative z-50 rounded-2xl ${ContainerStyle}`}
+      style={{
+        borderWidth: 1.5,
+        borderColor: isFocused ? "#0286ff" : "#e5e7eb",
+        backgroundColor: isFocused ? "#f0f7ff" : "#f9fafb",
+      }}
     >
       <TouchableOpacity
         onPress={handleSearchPress}
@@ -91,8 +93,9 @@ export default function OSMSearchBar({
       >
         <Image
           source={icon ? icon : icons.search}
-          className="w-6 h-6"
+          className="w-5 h-5"
           resizeMode="contain"
+          tintColor={isFocused ? "#0286ff" : "#9ca3af"}
         />
       </TouchableOpacity>
 
@@ -105,33 +108,75 @@ export default function OSMSearchBar({
           onBlur={handleBlur}
           onSubmitEditing={handleSubmitEditing}
           returnKeyType="search"
-          placeholder={initalLocation ?? "where you want to go ?"}
-          placeholderTextColor="gray"
-          className="px-4 py-3 rounded-full text-base font-semibold"
+          placeholder={initalLocation ?? "Where do you want to go?"}
+          placeholderTextColor="#9ca3af"
+          className="px-2 py-3 text-[15px]"
           style={{
-            backgroundColor:
-              textInputBackgroundColor ||
-              ContainerStyle?.backgroundColor ||
-              "#F0F0F0",
+            fontFamily: "Jakarta-Medium",
+            color: "#1f2937",
+            backgroundColor: "transparent",
           }}
         />
 
         {results.length > 0 && (
-          <View className="absolute top-14 w-full bg-white rounded-xl shadow-md z-50">
+          <View
+            className="absolute top-14 w-full bg-white rounded-2xl z-50"
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.12,
+              shadowRadius: 12,
+              elevation: 8,
+            }}
+          >
             <FlatList
               data={results}
               keyExtractor={(item) => item.place_id.toString()}
-              renderItem={({ item }) => (
+              keyboardShouldPersistTaps="handled"
+              renderItem={({ item, index }) => (
                 <TouchableOpacity
-                  className="px-4 py-3 border-b border-gray-200"
+                  className={`px-4 py-3 flex-row items-start ${
+                    index < results.length - 1
+                      ? "border-b border-gray-100"
+                      : ""
+                  }`}
                   onPress={() => handleSelectLocation(item)}
                 >
-                  <Text numberOfLines={2} className="font-medium">
-                    {item.display_name}
-                  </Text>
+                  <View className="w-8 h-8 rounded-full bg-gray-100 items-center justify-center mt-0.5 mr-3">
+                    <Image
+                      source={icons.point}
+                      className="w-4 h-4"
+                      tintColor="#6b7280"
+                      resizeMode="contain"
+                    />
+                  </View>
+                  <View className="flex-1">
+                    <Text
+                      numberOfLines={1}
+                      className="text-sm text-gray-900"
+                      style={{ fontFamily: "Jakarta-SemiBold" }}
+                    >
+                      {item.display_name.split(",")[0]}
+                    </Text>
+                    <Text
+                      numberOfLines={1}
+                      className="text-xs text-gray-400 mt-0.5"
+                      style={{ fontFamily: "Jakarta-Medium" }}
+                    >
+                      {item.display_name.split(",").slice(1).join(",").trim()}
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               )}
             />
+            <View className="px-4 py-2 border-t border-gray-100">
+              <Text
+                className="text-[10px] text-gray-300 text-center"
+                style={{ fontFamily: "Jakarta-Medium" }}
+              >
+                Powered by OpenStreetMap
+              </Text>
+            </View>
           </View>
         )}
       </View>

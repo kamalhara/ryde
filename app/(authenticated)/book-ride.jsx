@@ -186,31 +186,42 @@ const BookRide = () => {
 
         {/* Price & Time Card */}
         <View
-          className="bg-gradient-to-r from-green-500 to-green-600 rounded-3xl p-5 mb-6"
+          className="bg-white rounded-3xl p-5 mb-6"
           style={{
-            backgroundColor: "#22c55e",
-            shadowColor: "#22c55e",
+            shadowColor: "#000",
             shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
+            shadowOpacity: 0.1,
             shadowRadius: 12,
             elevation: 5,
           }}
         >
           <View className="flex flex-row justify-between">
-            <View className="flex-1 items-center border-r border-green-400">
-              <Text className="text-green-200 text-sm font-JakartaMedium">
+            <View className="flex-1 items-center border-r border-gray-100 pr-4">
+              <Text
+                className="text-xs text-gray-400 uppercase tracking-wide"
+                style={{ fontFamily: "Jakarta-Medium" }}
+              >
                 Estimated Fare
               </Text>
-              <Text className="text-white text-3xl font-JakartaBold mt-1">
+              <Text
+                className="text-3xl text-green-600 mt-2"
+                style={{ fontFamily: "Jakarta-Bold" }}
+              >
                 ${estimatedPrice}
               </Text>
             </View>
 
-            <View className="flex-1 items-center">
-              <Text className="text-green-200 text-sm font-JakartaMedium">
+            <View className="flex-1 items-center pl-4">
+              <Text
+                className="text-xs text-gray-400 uppercase tracking-wide"
+                style={{ fontFamily: "Jakarta-Medium" }}
+              >
                 Pickup Time
               </Text>
-              <Text className="text-white text-3xl font-JakartaBold mt-1">
+              <Text
+                className="text-3xl text-[#0286ff] mt-2"
+                style={{ fontFamily: "Jakarta-Bold" }}
+              >
                 {estimatedTime} min
               </Text>
             </View>

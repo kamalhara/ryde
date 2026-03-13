@@ -112,14 +112,20 @@ export default function Home() {
             <>
               <View className="flex flex-row items-center justify-between my-5">
                 <View>
-                  <Text className="text-sm font-medium text-gray-500">
+                  <Text
+                    className="text-sm text-gray-400"
+                    style={{ fontFamily: "Jakarta-Medium" }}
+                  >
                     {new Date().getHours() > 12 && new Date().getHours() < 18
                       ? "Good Afternoon 👋"
                       : new Date().getHours() < 12 && new Date().getHours() < 18
                         ? "Good Morning 👋"
                         : "Good Afternoon 👋"}
                   </Text>
-                  <Text className="text-2xl font-bold text-gray-900 mt-1">
+                  <Text
+                    className="text-2xl text-gray-900 mt-1"
+                    style={{ fontFamily: "Jakarta-Bold" }}
+                  >
                     {user?.firstName ||
                       user?.emailAddresses[0].emailAddress.split("@")[0]}
                   </Text>
@@ -170,9 +176,24 @@ export default function Home() {
                   <Map />
                 </View>
               </>
-              <Text className="text-lg font-semibold text-gray-800 mt-6 mb-3">
-                Recent Rides
-              </Text>
+              <View className="flex-row items-center justify-between">
+                <Text
+                  className="text-lg text-gray-800 mt-6 mb-3"
+                  style={{ fontFamily: "Jakarta-Bold" }}
+                >
+                  Recent Rides
+                </Text>
+                {rides?.length > 0 && (
+                  <View className="bg-blue-50 px-3 py-1 rounded-full mt-4">
+                    <Text
+                      className="text-xs text-[#0286ff]"
+                      style={{ fontFamily: "Jakarta-Bold" }}
+                    >
+                      {rides.length}
+                    </Text>
+                  </View>
+                )}
+              </View>
             </>
           )}
         />
