@@ -15,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Map from "../../../components/Map";
 import OSMSearchBar from "../../../components/OsmSearchBar";
 import RideCard from "../../../components/RideCard";
+import { RideCardSkeleton } from "../../../components/Skeleton";
 import { icons, images } from "../../../constants";
 import { useFetch } from "../../../lib/fetch";
 import { useDevAuthStore, useLocationStore } from "../../../store";
@@ -23,7 +24,6 @@ export default function Home() {
   const { user: clerkUser } = useUser();
   const { isDevLoggedIn, devUser, devLogout } = useDevAuthStore();
   const user = isDevLoggedIn ? devUser : clerkUser;
-  const isLoading = false;
   const { setUserLocation, setDestinationLocation } = useLocationStore();
   const mapRef = useRef(null);
   const { signOut } = useAuth();
@@ -91,15 +91,19 @@ export default function Home() {
           contentContainerStyle={{ paddingBottom: 100 }}
           ListEmptyComponent={() => (
             <View className="flex flex-col items-center justify-center">
-              {!isLoading ? (
+              {loading ? (
+                <View className="w-full">
+                  <RideCardSkeleton />
+                  <RideCardSkeleton />
+                  <RideCardSkeleton />
+                </View>
+              ) : (
                 <>
                   <Image source={images.noResult} className="h-40 w-40" />
                   <Text className="text-lg text-gray-500">
                     No rides available
                   </Text>
                 </>
-              ) : (
-                <Text className="text-lg text-gray-500">Loading...</Text>
               )}
             </View>
           )}

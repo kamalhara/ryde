@@ -2,6 +2,7 @@ import { useUser } from "@clerk/clerk-expo";
 import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RideCard from "../../../components/RideCard";
+import { RideCardSkeleton } from "../../../components/Skeleton";
 import { images } from "../../../constants";
 import { useDevAuthStore } from "../../../store";
 import { useFetch } from "../../../lib/fetch";
@@ -35,9 +36,14 @@ export default function Rides() {
           </View>
         )}
         ListEmptyComponent={() => (
-          <View className="flex flex-col items-center justify-center mt-10">
+          <View className="flex flex-col items-center justify-center mt-4">
             {loading ? (
-              <Text className="text-lg text-gray-500">Loading rides...</Text>
+              <View className="w-full">
+                <RideCardSkeleton />
+                <RideCardSkeleton />
+                <RideCardSkeleton />
+                <RideCardSkeleton />
+              </View>
             ) : (
               <>
                 <Image

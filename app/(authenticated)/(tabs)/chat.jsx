@@ -2,6 +2,7 @@ import { useUser } from "@clerk/clerk-expo";
 import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../../../constants";
+import { ChatItemSkeleton } from "../../../components/Skeleton";
 import { useDevAuthStore } from "../../../store";
 import { useFetch } from "../../../lib/fetch";
 
@@ -109,11 +110,15 @@ export default function Chat() {
           </View>
         )}
         ListEmptyComponent={() => (
-          <View className="flex flex-col items-center justify-center mt-10">
+          <View className="flex flex-col items-center justify-center mt-4">
             {loading ? (
-              <Text className="text-lg text-gray-500">
-                Loading conversations...
-              </Text>
+              <View className="w-full">
+                <ChatItemSkeleton />
+                <ChatItemSkeleton />
+                <ChatItemSkeleton />
+                <ChatItemSkeleton />
+                <ChatItemSkeleton />
+              </View>
             ) : (
               <>
                 <Image
