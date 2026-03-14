@@ -86,9 +86,25 @@ export default function Payment({
               setSuccess(false);
               router.push("/(authenticated)/(tabs)/home");
             }}
-            onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
+            onPressIn={() =>
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+            }
             className="mt-5"
           />
+          <View className="mt-2 w-full items-center px-[40px] py-[4px]">
+            <CustomButton
+              title="Rate the driver"
+              bgVariant="secondary"
+              onPress={() => {
+                setSuccess(false);
+                router.push("/(authenticated)/rate-driver");
+              }}
+              onPressIn={() =>
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+              }
+              className="mt-2"
+            />
+          </View>
         </View>
       </ReactNativeModal>
     </>

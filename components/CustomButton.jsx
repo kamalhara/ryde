@@ -60,7 +60,7 @@ const CustomButton = ({
       onPress={disabled || loading ? null : onPress}
       onPressIn={disabled || loading ? null : onPressIn}
       activeOpacity={disabled || loading ? 1 : 0.8}
-      className={`w-full rounded-full py-4 px-6 flex flex-row justify-center items-center ${getBgVariantStyle(bgVariant)} ${className}`}
+      className={`w-full  rounded-full py-4 px-6 flex flex-row justify-center items-center ${getBgVariantStyle(bgVariant)} ${className}`}
       style={{
         shadowColor: disabled ? "transparent" : getShadowColor(bgVariant),
         shadowOffset: { width: 0, height: disabled ? 0 : 4 },
