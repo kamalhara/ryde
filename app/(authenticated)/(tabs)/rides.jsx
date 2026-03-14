@@ -24,63 +24,65 @@ export default function Rides() {
         className="px-5"
         contentContainerStyle={{ paddingBottom: 100 }}
         ListHeaderComponent={() => (
-          <View className="my-5">
+          <View className="my-6">
             <View className="flex flex-row items-center justify-between">
               <Text
-                className="text-2xl text-gray-900"
+                className="text-3xl text-gray-900"
                 style={{ fontFamily: "Jakarta-Bold" }}
               >
                 Your Rides
               </Text>
               {rides?.length > 0 && (
-                <View className="bg-blue-50 px-3 py-1 rounded-full">
+                <View className="bg-blue-50 px-3 py-1.5 rounded-full border border-blue-100">
                   <Text
                     className="text-sm text-[#0286ff]"
-                    style={{ fontFamily: "Jakarta-Bold" }}
+                    style={{ fontFamily: "Jakarta-SemiBold" }}
                   >
-                    {rides.length} {rides.length === 1 ? "ride" : "rides"}
+                    {rides.length} {rides.length === 1 ? "Ride" : "Rides"}
                   </Text>
                 </View>
               )}
             </View>
             <Text
-              className="text-sm text-gray-400 mt-1"
+              className="text-base text-gray-500 mt-2"
               style={{ fontFamily: "Jakarta-Medium" }}
             >
-              View your ride history
+              View your recent journey history
             </Text>
           </View>
         )}
         ListEmptyComponent={() => (
-          <View className="flex flex-col items-center justify-center mt-4">
+          <View className="flex flex-col items-center justify-center mt-10">
             {loading ? (
-              <View className="w-full">
+              <View className="w-full gap-y-4">
                 <RideCardSkeleton />
                 <RideCardSkeleton />
                 <RideCardSkeleton />
                 <RideCardSkeleton />
               </View>
             ) : (
-              <>
-                <Image
-                  source={images.noResult}
-                  className="h-40 w-40"
-                  resizeMode="contain"
-                />
+              <View className="items-center justify-center py-10">
+                <View className="w-48 h-48 bg-gray-50 rounded-full items-center justify-center mb-6">
+                  <Image
+                    source={images.noResult}
+                    className="h-32 w-32 opacity-80"
+                    resizeMode="contain"
+                  />
+                </View>
                 <Text
-                  className="text-lg text-gray-800 mt-4"
+                  className="text-2xl text-gray-900 mt-2 text-center"
                   style={{ fontFamily: "Jakarta-Bold" }}
                 >
-                  No rides yet
+                  No rides found
                 </Text>
                 <Text
-                  className="text-sm text-gray-400 mt-1 text-center px-10"
+                  className="text-base text-gray-500 mt-3 text-center px-8 leading-6"
                   style={{ fontFamily: "Jakarta-Medium" }}
                 >
-                  Your ride history will appear here once you book your first
-                  ride.
+                  You haven&apos;t booked any rides yet. Your past journeys will
+                  appear here.
                 </Text>
-              </>
+              </View>
             )}
           </View>
         )}

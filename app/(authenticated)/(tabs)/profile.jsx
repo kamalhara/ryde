@@ -69,35 +69,48 @@ export default function Profile() {
         contentContainerStyle={{ paddingBottom: 100 }}
       >
         {/* Header */}
-        <Text
-          className="text-2xl text-gray-900 my-5"
-          style={{ fontFamily: "Jakarta-Bold" }}
-        >
-          Profile
-        </Text>
+        <View className="my-6">
+          <Text
+            className="text-3xl text-gray-900"
+            style={{ fontFamily: "Jakarta-Bold" }}
+          >
+            Profile
+          </Text>
+          <Text
+            className="text-base text-gray-500 mt-2"
+            style={{ fontFamily: "Jakarta-Medium" }}
+          >
+            Manage your account and preferences
+          </Text>
+        </View>
 
         {/* Profile Card */}
         <View
-          className="bg-white rounded-3xl p-6 items-center"
+          className="bg-white rounded-[32px] p-6 items-center border border-gray-100 mb-2 mt-4"
           style={{
             shadowColor: "#000",
             shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.08,
+            shadowOpacity: 0.05,
             shadowRadius: 12,
-            elevation: 4,
+            elevation: 2,
           }}
         >
-          {/* Avatar */}
-          <View className="relative">
-            <Image
-              source={{ uri: user?.imageUrl }}
-              className="w-24 h-24 rounded-full"
-              style={{ borderWidth: 3, borderColor: "#0286ff" }}
-            />
-            <View className="absolute bottom-0 right-0 bg-green-500 rounded-full p-1.5 border-2 border-white">
+          {/* Avatar Container with glowing effect */}
+          <View className="relative mt-2">
+            <View className="absolute inset-0 bg-blue-100 rounded-full scale-110 opacity-50 blur-md" />
+            <View className="w-28 h-28 rounded-full bg-white p-1">
+              <Image
+                source={{ uri: user?.imageUrl }}
+                className="w-full h-full rounded-full"
+              />
+            </View>
+            <View
+              className="absolute bottom-1 right-1 bg-[#10b981] rounded-full p-1.5 border-4 border-white"
+              style={{ elevation: 2 }}
+            >
               <Image
                 source={icons.checkmark}
-                className="w-3 h-3"
+                className="w-3.5 h-3.5"
                 tintColor="#fff"
               />
             </View>
@@ -105,7 +118,7 @@ export default function Profile() {
 
           {/* Name & Email */}
           <Text
-            className="text-xl text-gray-900 mt-4"
+            className="text-2xl text-gray-900 mt-5"
             style={{ fontFamily: "Jakarta-Bold" }}
           >
             {user?.fullName ||
@@ -113,53 +126,60 @@ export default function Profile() {
               user?.emailAddresses[0]?.emailAddress?.split("@")[0]}
           </Text>
           <Text
-            className="text-sm text-gray-400 mt-1"
+            className="text-base text-gray-500 mt-1"
             style={{ fontFamily: "Jakarta-Medium" }}
           >
             {user?.emailAddresses[0]?.emailAddress}
           </Text>
 
           {/* Stats Row */}
-          <View className="flex flex-row mt-6 w-full bg-gray-50 rounded-2xl py-4">
-            <View className="flex-1 items-center">
+          <View className="flex flex-row mt-8 w-full bg-blue-50/50 border border-blue-50 rounded-3xl py-5">
+            <View className="flex-1 items-center justify-center border-r border-blue-100">
               <Text
-                className="text-xl text-gray-900"
+                className="text-2xl text-gray-900"
                 style={{ fontFamily: "Jakarta-Bold" }}
               >
                 {rides?.length || 0}
               </Text>
               <Text
-                className="text-xs text-gray-400 mt-1"
+                className="text-sm text-gray-500 mt-1"
                 style={{ fontFamily: "Jakarta-Medium" }}
               >
                 Rides
               </Text>
             </View>
-            <View className="w-[1px] bg-gray-200" />
-            <View className="flex-1 items-center">
+            
+            <View className="flex-1 items-center justify-center border-r border-blue-100">
+              <View className="flex-row items-center mb-0.5">
+                <Text
+                  className="text-2xl text-gray-900"
+                  style={{ fontFamily: "Jakarta-Bold" }}
+                >
+                  4.9
+                </Text>
+                <Image
+                  source={icons.star}
+                  className="w-4 h-4 ml-1 mb-1"
+                  tintColor="#f59e0b"
+                />
+              </View>
               <Text
-                className="text-xl text-gray-900"
-                style={{ fontFamily: "Jakarta-Bold" }}
-              >
-                4.9
-              </Text>
-              <Text
-                className="text-xs text-gray-400 mt-1"
+                className="text-sm text-gray-500 mt-0.5"
                 style={{ fontFamily: "Jakarta-Medium" }}
               >
                 Rating
               </Text>
             </View>
-            <View className="w-[1px] bg-gray-200" />
-            <View className="flex-1 items-center">
+            
+            <View className="flex-1 items-center justify-center">
               <Text
-                className="text-xl text-gray-900"
+                className="text-2xl text-gray-900"
                 style={{ fontFamily: "Jakarta-Bold" }}
               >
                 {new Date(user?.createdAt).getFullYear() || "2024"}
               </Text>
               <Text
-                className="text-xs text-gray-400 mt-1"
+                className="text-sm text-gray-500 mt-1"
                 style={{ fontFamily: "Jakarta-Medium" }}
               >
                 Member
