@@ -1,4 +1,6 @@
-import { Image, Text, View } from "react-native";
+import * as Haptics from "expo-haptics";
+import { router } from "expo-router";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { icons } from "../constants";
 import { formatDate, formatTime } from "../lib/utils";
 
@@ -151,6 +153,24 @@ export default function RideCard({
             </View>
           </View>
         </View>
+      </View>
+      <View className="px-4 pb-4">
+        <TouchableOpacity
+          onPress={() => {
+            router.push("/(authenticated)/rate-driver");
+          }}
+          onPressIn={() =>
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+          }
+          className="bg-[#0286ff] py-3 rounded-xl items-center"
+        >
+          <Text
+            className="text-sm text-white"
+            style={{ fontFamily: "Jakarta-Bold" }}
+          >
+            ⭐ Rate Driver
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
