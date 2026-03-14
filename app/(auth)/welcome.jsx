@@ -13,7 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../../components/CustomButton";
 import { onboarding } from "../../constants";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 export default function Welcome() {
   const router = useRouter();
@@ -63,21 +63,22 @@ export default function Welcome() {
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* Skip Button */}
-      <TouchableOpacity
-        onPress={() => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          router.push("/signup");
-        }}
-        className="absolute top-14 right-5 z-10 px-4 py-2 rounded-full"
-        style={{ backgroundColor: "rgba(0,0,0,0.05)" }}
-      >
-        <Text
-          className="text-gray-600 text-sm"
-          style={{ fontFamily: "Jakarta-SemiBold" }}
+      <View className="absolute top-14 right-5 z-10">
+        <TouchableOpacity
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            router.push("/signup");
+          }}
+          className="bg-gray-100 px-5 py-2.5 rounded-full"
         >
-          Skip
-        </Text>
-      </TouchableOpacity>
+          <Text
+            className="text-gray-900 text-sm"
+            style={{ fontFamily: "Jakarta-SemiBold" }}
+          >
+            Skip
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Slide Content with Animation */}
       <View className="flex-1 justify-center items-center px-6">
@@ -127,9 +128,9 @@ export default function Welcome() {
       </View>
 
       {/* Bottom Section */}
-      <View className="px-6 pb-8">
+      <View className="px-6 pb-8 pt-4">
         {/* Progress Dots */}
-        <View className="flex-row justify-center mb-6">
+        <View className="flex-row justify-center mb-8 gap-x-1">
           {onboarding.map((_, index) => (
             <TouchableOpacity
               key={index}
@@ -139,11 +140,11 @@ export default function Welcome() {
                   animateTransition(index);
                 }
               }}
-              className="px-1 py-2"
+              className="py-2"
             >
               <View
-                className={`h-2 rounded-full ${
-                  index === activeIndex ? "w-8 bg-[#0286ff]" : "w-2 bg-gray-200"
+                className={`h-2 rounded-full transition-colors ${
+                  index === activeIndex ? "w-8 bg-[#0286ff]" : "w-2.5 bg-gray-200"
                 }`}
               />
             </TouchableOpacity>

@@ -149,27 +149,31 @@ export default function Login() {
       >
         <View className="flex-1 bg-white">
           {/* Hero Section */}
-          <View className="relative w-full h-[280px]">
+          <View className="relative w-full h-[260px]">
             <Image
               source={images.signUpCar}
               className="w-full h-full"
               resizeMode="cover"
             />
-            <View className="absolute bottom-0 left-0 right-0 px-6 pb-5">
-              <Text
-                className="text-gray-900 text-3xl font-bold"
-                style={{ fontFamily: "Jakarta-Bold" }}
-              >
-                Welcome{"\n"}back
-              </Text>
-              <Text className="text-gray-500 text-sm mt-1">
-                Log in to continue your ride
-              </Text>
-            </View>
           </View>
 
           {/* Form Section */}
-          <View className="px-6 pt-6 pb-4">
+          <View className="bg-white rounded-t-[32px] -mt-10 px-6 pt-8 pb-4 relative z-10 flex-1">
+            <View className="mb-6">
+              <Text
+                className="text-gray-900 text-3xl"
+                style={{ fontFamily: "Jakarta-Bold" }}
+              >
+                Welcome back
+              </Text>
+              <Text
+                className="text-gray-500 text-base mt-2"
+                style={{ fontFamily: "Jakarta-Medium" }}
+              >
+                Log in to continue your ride
+              </Text>
+            </View>
+
             <InputField
               label="Email"
               placeholder="Enter your email"
@@ -189,7 +193,7 @@ export default function Login() {
             />
 
             {/* Remember Me & Forgot Password Row */}
-            <View className="flex-row items-center justify-between mt-2 mb-2">
+            <View className="flex-row items-center justify-between mt-2 mb-4">
               <TouchableOpacity
                 className="flex-row items-center"
                 onPress={() => {
@@ -229,7 +233,7 @@ export default function Login() {
 
             <CustomButton
               title="Log In"
-              className="mt-4"
+              className="mt-2"
               onPress={onSignInPress}
               loading={isLoading}
               disabled={isLoading}
@@ -242,13 +246,16 @@ export default function Login() {
 
             {/* Sign Up Link */}
             <View className="flex-row justify-center mt-8 mb-4">
-              <Text className="text-gray-500 text-base">
+              <Text
+                className="text-gray-500 text-base"
+                style={{ fontFamily: "Jakarta-Medium" }}
+              >
                 Don&apos;t have an account?{" "}
               </Text>
               <Link href="/signup" asChild>
                 <TouchableOpacity>
                   <Text
-                    className="text-[#0286ff] text-base font-bold"
+                    className="text-[#0286ff] text-base"
                     style={{ fontFamily: "Jakarta-Bold" }}
                   >
                     Sign Up

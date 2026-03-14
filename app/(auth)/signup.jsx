@@ -142,34 +142,31 @@ export default function Signup() {
       >
         <View className="flex-1 bg-white">
           {/* Hero Section */}
-          <View className="relative w-full h-[280px]">
+          <View className="relative w-full h-[260px]">
             <Image
               source={images.signUpCar}
               className="w-full h-full"
               resizeMode="cover"
             />
-            {/* Gradient overlay */}
-            <View
-              className="absolute bottom-0 left-0 right-0 h-32"
-              style={{
-                backgroundColor: "transparent",
-              }}
-            />
-            <View className="absolute bottom-0 left-0 right-0 px-6 pb-5">
-              <Text
-                className="text-gray-900 text-3xl font-bold"
-                style={{ fontFamily: "Jakarta-Bold" }}
-              >
-                Create your{"\n"}account
-              </Text>
-              <Text className="text-gray-500 text-sm mt-1">
-                Sign up to get started with Ryde
-              </Text>
-            </View>
           </View>
 
           {/* Form Section */}
-          <View className="px-6 pt-6 pb-4">
+          <View className="bg-white rounded-t-[32px] -mt-10 px-6 pt-8 pb-4 relative z-10 flex-1">
+            <View className="mb-6">
+              <Text
+                className="text-gray-900 text-3xl"
+                style={{ fontFamily: "Jakarta-Bold" }}
+              >
+                Create your account
+              </Text>
+              <Text
+                className="text-gray-500 text-base mt-2"
+                style={{ fontFamily: "Jakarta-Medium" }}
+              >
+                Sign up to get started with Ryde
+              </Text>
+            </View>
+
             <InputField
               label="Full Name"
               placeholder="Enter your name"
@@ -261,13 +258,16 @@ export default function Signup() {
 
             {/* Login Link */}
             <View className="flex-row justify-center mt-8 mb-2">
-              <Text className="text-gray-500 text-base">
+              <Text
+                className="text-gray-500 text-base"
+                style={{ fontFamily: "Jakarta-Medium" }}
+              >
                 Already have an account?{" "}
               </Text>
               <Link href="/login" asChild>
                 <TouchableOpacity>
                   <Text
-                    className="text-[#0286ff] text-base font-bold"
+                    className="text-[#0286ff] text-base"
                     style={{ fontFamily: "Jakarta-Bold" }}
                   >
                     Log In
@@ -278,7 +278,7 @@ export default function Signup() {
 
             {/* Terms of Service */}
             <Text
-              className="text-center text-gray-300 text-xs mt-4 mb-4 px-6 leading-5"
+              className="text-center text-gray-400 text-xs mt-4 mb-4 px-6 leading-5"
               style={{ fontFamily: "Jakarta-Medium" }}
             >
               By signing up, you agree to our{" "}
