@@ -159,7 +159,7 @@ export default function RideCard({
           </View>
         </View>
       </View>
-      <View className="px-4 pb-4">
+      <View className="px-4 pb-4 mt-2">
         <TouchableOpacity
           onPress={() => {
             setShowRating(true);
@@ -167,17 +167,19 @@ export default function RideCard({
           onPressIn={() =>
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
           }
-          className="bg-[#0286ff] py-3 rounded-full items-center"
+          className="bg-[#0286ff]/10 py-3.5 rounded-2xl items-center flex-row justify-center"
         >
+          <Ionicons name="star" size={18} color="#0286ff" />
           <Text
-            className="text-sm text-white"
+            className="text-sm text-[#0286ff] ml-2"
             style={{ fontFamily: "Jakarta-Bold" }}
           >
-            ⭐ Rate Driver
+            Rate Driver
           </Text>
         </TouchableOpacity>
       </View>
       <ReactNativeModal
+        avoidKeyboard={true}
         isVisible={showRating}
         animationIn="slideInUp"
         animationOut="slideOutDown"
@@ -185,22 +187,29 @@ export default function RideCard({
         onBackButtonPress={() => setShowRating(false)}
         style={{ justifyContent: "flex-end", margin: 0 }}
       >
-        <View className="bg-white rounded-t-3xl p-5">
-          {/* Title */}
-          <Text
-            className="text-lg text-gray-900 mb-4 text-center"
-            style={{ fontFamily: "Jakarta-Bold" }}
-          >
-            Rate Your Driver
-          </Text>
+        <View className="bg-white rounded-t-3xl p-6">
+          {/* Header */}
+          <View className="flex-row justify-between items-center mb-6">
+            <Text
+              className="text-xl text-gray-900"
+              style={{ fontFamily: "Jakarta-Bold" }}
+            >
+              Rate Your Experience
+            </Text>
+            <TouchableOpacity
+              onPress={() => setShowRating(false)}
+              className="w-8 h-8 bg-gray-100 rounded-full items-center justify-center"
+            >
+              <Ionicons name="close" size={20} color="#4b5563" />
+            </TouchableOpacity>
+          </View>
 
           {/* Driver Info */}
-          <View className="flex-row items-center mb-5">
+          <View className="flex-row items-center bg-gray-50 p-4 rounded-2xl mb-6 border border-gray-100">
             <Image
               source={{ uri: driver.profile_image_url }}
-              className="w-16 h-16 rounded-full"
+              className="w-14 h-14 rounded-full"
             />
-
             <View className="ml-4 flex-1">
               <Text
                 className="text-lg text-gray-900"
@@ -215,64 +224,110 @@ export default function RideCard({
                   className="w-4 h-4"
                   tintColor="#f59e0b"
                 />
-                <Text className="text-sm text-amber-600 ml-1">4.8</Text>
+                <Text
+                  className="text-sm text-gray-600 ml-1"
+                  style={{ fontFamily: "Jakarta-Medium" }}
+                >
+                  4.8
+                </Text>
               </View>
             </View>
           </View>
 
+          {/* Rating Prompt */}
+          <Text
+            className="text-center text-gray-500 mb-4"
+            style={{ fontFamily: "Jakarta-Medium" }}
+          >
+            How was your trip with {driver.first_name}?
+          </Text>
+
           {/* Rating Stars */}
-          <View className="flex-row justify-center mb-6 gap-x-2">
+          <View className="flex-row justify-center gap-x-2 mb-2">
             {[1, 2, 3, 4, 5].map((star) => (
-              <View key={star}>
-                <TouchableOpacity onPress={() => setRating(star)}>
-                  <Ionicons
-                    name="star"
-                    size={24}
-                    color={rating >= star ? "#f59e0b" : "#e5e7eb"}
-                  />
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                key={star}
+                onPress={() => {
+                  setRating(star);
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                }}
+                className={`w-12 h-12 items-center justify-center rounded-full ${
+                  rating >= star ? "bg-amber-100" : "bg-gray-50"
+                }`}
+              >
+                <Ionicons
+                  name="star"
+                  size={26}
+                  color={rating >= star ? "#f59e0b" : "#d1d5db"}
+                />
+              </TouchableOpacity>
             ))}
           </View>
-          <View className="my-4 items-center ">
-            <Text
-              className="text-lg text-gray-900"
-              style={{ fontFamily: "Jakarta-SemiBold" }}
-            >
-              {rating === 1
-                ? "Terrible"
-                : rating === 2
-                  ? "Bad"
-                  : rating === 3
-                    ? "Average"
-                    : rating === 4
-                      ? "Good"
-                      : rating === 5
-                        ? "Excellent"
-                        : ""}
-            </Text>
+
+          {/* Dynamic Rating Text */}
+          <View className="h-8 items-center justify-center mb-6">
+            {rating > 0 && (
+              <Text
+                className="text-lg transition-colors"
+                style={{
+                  fontFamily: "Jakarta-Bold",
+                  color:
+                    rating <= 2
+                      ? "#ef4444"
+                      : rating === 3
+                        ? "#f59e0b"
+                        : "#10b981",
+                }}
+              >
+                {rating === 1
+                  ? "Terrible 😞"
+                  : rating === 2
+                    ? "Bad 🫤"
+                    : rating === 3
+                      ? "Average 😐"
+                      : rating === 4
+                        ? "Good 🙂"
+                        : "Excellent 🤩!"}
+              </Text>
+            )}
           </View>
 
-          <TextInput
-            placeholder="Leave a comment..."
-            value={comment}
-            onChangeText={setComment}
-            multiline
-            className="border border-gray-200 rounded-xl p-3 text-sm mb-5"
-            style={{ fontFamily: "Jakarta-Medium", minHeight: 80 }}
-          />
+          {/* Comment Input */}
+          <View className="bg-gray-50 rounded-2xl p-4 mb-6 border border-gray-100">
+            <TextInput
+              placeholder="Add a comment... (Optional)"
+              placeholderTextColor="#9ca3af"
+              value={comment}
+              onChangeText={setComment}
+              multiline
+              textAlignVertical="top"
+              className="text-base text-gray-800"
+              style={{ fontFamily: "Jakarta-Medium", minHeight: 100 }}
+            />
+          </View>
 
           {/* Submit Button */}
           <TouchableOpacity
+            disabled={rating === 0}
             onPress={() => {
               console.log("Rating:", rating);
               console.log("Comment:", comment);
               setShowRating(false);
+              Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Success
+              );
+              // Resetting rating and comment string for future ratings on the same component instance
+              setTimeout(() => {
+                setRating(0);
+                setComment("");
+              }, 400);
             }}
-            className="bg-[#0286ff] mb-3 py-4 items-center rounded-full"
+            className={`py-4 items-center rounded-full mb-4 ${
+              rating === 0 ? "bg-blue-200" : "bg-[#0286ff]"
+            }`}
           >
             <Text
-              className="text-white text-base"
+              className="text-white text-lg"
               style={{ fontFamily: "Jakarta-Bold" }}
             >
               Submit Rating
