@@ -1,8 +1,10 @@
 import * as Haptics from "expo-haptics";
-import { router } from "expo-router";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import ReactNativeModal from "react-native-modal";
 import { icons } from "../constants";
 import { formatDate, formatTime } from "../lib/utils";
+import { useDriverStore } from "../store";
 
 export default function RideCard({
   ride: {
@@ -19,6 +21,12 @@ export default function RideCard({
     payment_status,
   },
 }) {
+  const [showRating, setShowRating] = useState(false);
+  const { selectedDriver } = useDriverStore();
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const isSelected = selectedDriver === driver.id;
+
   return (
     <View
       className="bg-white rounded-2xl mb-4 overflow-hidden"
@@ -30,11 +38,9 @@ export default function RideCard({
         elevation: 3,
       }}
     >
-      {/* Accent bar */}
       <View className="h-1 bg-[#0286ff]" />
 
       <View className="p-4">
-        {/* Map & Addresses Section */}
         <View className="flex flex-row items-center">
           <Image
             source={{
@@ -80,10 +86,8 @@ export default function RideCard({
           </View>
         </View>
 
-        {/* Divider */}
         <View className="h-[1px] bg-gray-100 my-4" />
 
-        {/* Details Section */}
         <View className="gap-y-3">
           <View className="flex flex-row items-center justify-between">
             <Text
@@ -157,12 +161,12 @@ export default function RideCard({
       <View className="px-4 pb-4">
         <TouchableOpacity
           onPress={() => {
-            router.push("/(authenticated)/rate-driver");
+            setShowRating(true);
           }}
           onPressIn={() =>
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
           }
-          className="bg-[#0286ff] py-3 rounded-xl items-center"
+          className="bg-[#0286ff] py-3 rounded-full items-center"
         >
           <Text
             className="text-sm text-white"
@@ -172,6 +176,90 @@ export default function RideCard({
           </Text>
         </TouchableOpacity>
       </View>
+      <ReactNativeModal
+        isVisible={showRating}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        onBackdropPress={() => setShowRating(false)}
+        onBackButtonPress={() => setShowRating(false)}
+        style={{ justifyContent: "flex-end", margin: 0 }}
+      >
+        <View className="bg-white rounded-t-3xl p-5">
+          {/* Title */}
+          <Text
+            className="text-lg text-gray-900 mb-4 text-center"
+            style={{ fontFamily: "Jakarta-Bold" }}
+          >
+            Rate Your Driver
+          </Text>
+
+          {/* Driver Info */}
+          <View className="flex-row items-center mb-5">
+            <Image
+              source={{ uri: driver.profile_image_url }}
+              className="w-16 h-16 rounded-full"
+            />
+
+            <View className="ml-4 flex-1">
+              <Text
+                className="text-lg text-gray-900"
+                style={{ fontFamily: "Jakarta-SemiBold" }}
+              >
+                {driver.first_name} {driver.last_name}
+              </Text>
+
+              <View className="flex-row items-center mt-1">
+                <Image
+                  source={icons.star}
+                  className="w-4 h-4"
+                  tintColor="#f59e0b"
+                />
+                <Text className="text-sm text-amber-600 ml-1">4.8</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Rating Stars */}
+          <View className="flex-row justify-center mb-6">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <TouchableOpacity key={star} onPress={() => setRating(star)}>
+                <Image
+                  source={icons.star}
+                  className="w-8 h-8 mx-2"
+                  tintColor={rating >= star ? "#f59e0b" : "#e5e7eb"}
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {/* Comment Input */}
+          <TextInput
+            placeholder="Leave a comment..."
+            value={comment}
+            onChangeText={setComment}
+            multiline
+            className="border border-gray-200 rounded-xl p-3 text-sm mb-5"
+            style={{ fontFamily: "Jakarta-Medium", minHeight: 80 }}
+          />
+
+          {/* Submit Button */}
+          <TouchableOpacity
+            onPress={() => {
+              console.log("Rating:", rating);
+              console.log("Comment:", comment);
+              setShowRating(false);
+            }}
+            className="bg-[#0286ff] mb-3 py-4 items-center rounded-full"
+          >
+            <Text
+              className="text-white text-base"
+              style={{ fontFamily: "Jakarta-Bold" }}
+            >
+              Submit Rating
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ReactNativeModal>
     </View>
   );
 }
