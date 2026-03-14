@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useState } from "react";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -220,19 +221,38 @@ export default function RideCard({
           </View>
 
           {/* Rating Stars */}
-          <View className="flex-row justify-center mb-6">
+          <View className="flex-row justify-center mb-6 gap-x-2">
             {[1, 2, 3, 4, 5].map((star) => (
-              <TouchableOpacity key={star} onPress={() => setRating(star)}>
-                <Image
-                  source={icons.star}
-                  className="w-8 h-8 mx-2"
-                  tintColor={rating >= star ? "#f59e0b" : "#e5e7eb"}
-                />
-              </TouchableOpacity>
+              <View key={star}>
+                <TouchableOpacity onPress={() => setRating(star)}>
+                  <Ionicons
+                    name="star"
+                    size={24}
+                    color={rating >= star ? "#f59e0b" : "#e5e7eb"}
+                  />
+                </TouchableOpacity>
+              </View>
             ))}
           </View>
+          <View className="my-4 items-center ">
+            <Text
+              className="text-lg text-gray-900"
+              style={{ fontFamily: "Jakarta-SemiBold" }}
+            >
+              {rating === 1
+                ? "Terrible"
+                : rating === 2
+                  ? "Bad"
+                  : rating === 3
+                    ? "Average"
+                    : rating === 4
+                      ? "Good"
+                      : rating === 5
+                        ? "Excellent"
+                        : ""}
+            </Text>
+          </View>
 
-          {/* Comment Input */}
           <TextInput
             placeholder="Leave a comment..."
             value={comment}
