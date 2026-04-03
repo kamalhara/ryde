@@ -133,7 +133,7 @@ export default function Map() {
       showsUserLocation={true}
       userInterfaceStyle="light"
       showsMyLocationButton={true}
-      mapType="mutedStandard"
+      mapType={Platform.OS === "ios" ? "mutedStandard" : "standard"}
       tintColor="black"
       showsPointsOfInterest={false}
     >

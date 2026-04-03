@@ -4,27 +4,26 @@ import {
   Label,
   NativeTabs,
 } from "expo-router/unstable-native-tabs";
-import { Image, View } from "react-native";
 
 const TabsLayout = () => {
-  const TabsIcon = ({ source, focused }) => {
-    return (
-      <View
-        className={`flex flex-row justify-center items-center rounded-full ${focused ? "bg-green-500" : ""}`}
-      >
-        <View
-          className={`w-12 h-12 items-center justify-center rounded-full ${focused ? "bg-green-500" : ""}`}
-        >
-          <Image
-            source={source}
-            tintColor="white"
-            resizeMode="contain"
-            className="w-7 h-7"
-          />
-        </View>
-      </View>
-    );
-  };
+  // const TabsIcon = ({ source, focused }) => {
+  //   return (
+  //     <View
+  //       className={`flex flex-row justify-center items-center rounded-full ${focused ? "bg-green-500" : ""}`}
+  //     >
+  //       <View
+  //         className={`w-12 h-12 items-center justify-center rounded-full ${focused ? "bg-green-500" : ""}`}
+  //       >
+  //         <Image
+  //           source={source}
+  //           tintColor="white"
+  //           resizeMode="contain"
+  //           className="w-7 h-7"
+  //         />
+  //       </View>
+  //     </View>
+  //   );
+  // };
 
   return (
     <NativeTabs>
