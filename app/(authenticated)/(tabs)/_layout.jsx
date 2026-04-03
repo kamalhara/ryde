@@ -11,18 +11,16 @@ import { icons } from "../../../constants";
 const TabsIcon = ({ source, focused }) => {
   return (
     <View
-      className={`flex flex-row justify-center items-center rounded-full ${focused ? "bg-green-500" : ""}`}
+      className={`items-center justify-center rounded-full h-12 w-12 ${
+        focused ? "bg-green-500" : "bg-transparent"
+      }`}
     >
-      <View
-        className={`w-12 h-12 items-center justify-center rounded-full ${focused ? "bg-green-500" : ""}`}
-      >
-        <Image
-          source={source}
-          tintColor="white"
-          resizeMode="contain"
-          className="w-7 h-7"
-        />
-      </View>
+      <Image
+        source={source}
+        tintColor={focused ? "white" : "#a3a3a3"}
+        resizeMode="contain"
+        className="w-6 h-6"
+      />
     </View>
   );
 };
@@ -57,17 +55,24 @@ const TabsLayout = () => {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: "white",
-        tabBarInactiveTintColor: "white",
+        tabBarInactiveTintColor: "#a3a3a3",
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: "#3f3f3f",
-          borderRadius: 50,
-          overflow: "hidden",
-          marginHorizontal: 20,
-          marginBottom: 20,
-          height: 70,
+          backgroundColor: "#2a2a2a",
+          borderRadius: 40,
+          marginHorizontal: 24,
+          marginBottom: 30,
+          height: 72,
           position: "absolute",
-          elevation: 5,
+          elevation: 10,
+          shadowColor: "#000",
+          shadowOpacity: 0.3,
+          shadowRadius: 10,
+          shadowOffset: { width: 0, height: 6 },
+          borderWidth: 1,
+          borderColor: "#3a3a3a",
+          borderTopWidth: 1, // overrides react navigation default layout border
+          paddingTop: 0,
         },
         tabBarItemStyle: {
           flex: 1,
