@@ -16,9 +16,14 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.kamalhara.ryde",
+      "buildNumber": "1",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app uses your location to find nearby rides and show your position on the map.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app uses your location to find nearby rides and track your trip in the background."
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app uses your location to find nearby rides and track your trip in the background.",
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
       }
     },
     "android": {
@@ -28,7 +33,18 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.kamalhara.ryde"
+      "package": "com.kamalhara.ryde",
+      "versionCode": 1,
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION"
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "YOUR_GOOGLE_MAPS_API_KEY_HERE"
+        }
+      }
     },
     "web": {
       "output": "server",
